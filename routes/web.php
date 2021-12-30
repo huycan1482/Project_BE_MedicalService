@@ -11,10 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
+use Illuminate\Support\Facades\Route;
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::resource('province', 'ProvinceController'); 
+    Route::get('province/forceDelete/{id}', 'ProvinceController@forceDelete')->name('province.forceDelete');
+    Route::get('province/restore/{id}', 'ProvinceController@restore')->name('province.restore');
+
+    Route::resource('district', 'DistrictController'); 
+    Route::get('district/forceDelete/{id}', 'DistrictController@forceDelete')->name('district.forceDelete');
+    Route::get('district/restore/{id}', 'DistrictController@restore')->name('district.restore');
+
+});

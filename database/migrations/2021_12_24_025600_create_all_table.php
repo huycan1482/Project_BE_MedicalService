@@ -16,6 +16,7 @@ class CreateAllTable extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->string('code', 255)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -23,6 +24,7 @@ class CreateAllTable extends Migration
         Schema::create('districts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->string('code', 255)->unique();
             $table->unsignedBigInteger('province_id');
             $table->timestamps();
             $table->softDeletes();
@@ -33,6 +35,7 @@ class CreateAllTable extends Migration
         Schema::create('wards', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->string('code', 255)->unique();
             $table->unsignedBigInteger('districts_id');
             $table->timestamps();
             $table->softDeletes();
@@ -93,6 +96,13 @@ class CreateAllTable extends Migration
             $table->foreign('disease_id')->references('id')->on('diseases')->onDelete('cascade');
         });
 
+        Schema::create('prioritizations', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name', 255);
+            $table->string('description', 255);
+            $table->timestamps();
+            $table->softDeletes();
+        });
 
         Schema::create('tables', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -139,8 +149,10 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->string('code', 255)->unique();
             $table->string('identity_card', 255)->unique();
+            $table->string('health_insurance_card', 255)->unique()->nullable();
             $table->string('name');
             $table->date('date_of_birth');
+            $table->integer('gender');
             $table->string('phone', 255)->nullable();
             $table->string('address', 255);
             $table->unsignedBigInteger('province_id');
