@@ -50,6 +50,7 @@
 
 
     <link rel="stylesheet" href="/myAssets/css/layouts.css">
+    <link rel="stylesheet" href="/myAssets/css/main.css">
 
     @yield('css')
 

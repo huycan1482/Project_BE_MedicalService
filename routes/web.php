@@ -24,4 +24,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('district/forceDelete/{id}', 'DistrictController@forceDelete')->name('district.forceDelete');
     Route::get('district/restore/{id}', 'DistrictController@restore')->name('district.restore');
 
+
+    // ImportController
+    Route::post('import/province', 'ImportController@importProvince')->name('import.province');
+
+
 });

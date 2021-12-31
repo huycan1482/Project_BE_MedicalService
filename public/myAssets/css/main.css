@@ -1,0 +1,7 @@
+.custom-import input[type="file"] {
+    display: inline;
+}
+
+.custom-import {
+    margin-bottom: 10px;
+}

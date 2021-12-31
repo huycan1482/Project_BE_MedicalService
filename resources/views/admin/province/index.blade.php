@@ -18,74 +18,84 @@
 </section>
 
 <section class="content">
-    <div class="row">
-        <div class="modal fade" id="modal-default">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Thông tin chi tiết</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="box">
-                            <div class="box-body table-responsive no-padding">
-                                <table class="table-hover table table-bordered table-striped dataTable" role="grid"
-                                    aria-describedby="example1_info" style="margin-top: 0 !important;">
-                                    <tbody>
-                                        <tr style="width: 100%">
-                                            <td class="" style="width: 30%">
-                                                Tên môn học:
-                                            </td>
-                                            <td class="modal-subject-name" style="width: 70%">
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Thông tin chi tiết</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table-hover table table-bordered table-striped dataTable" role="grid"
+                                aria-describedby="example1_info" style="margin-top: 0 !important;">
+                                <tbody>
+                                    <tr style="width: 100%">
+                                        <td class="" style="width: 30%">
+                                            Tên môn học:
+                                        </td>
+                                        <td class="modal-subject-name" style="width: 70%">
 
-                                            </td>
-                                        </tr>
-                                        <tr style="width: 100%">
-                                            <td class="" style="width: 30%">
-                                                Mã môn học:
-                                            </td>
-                                            <td class="modal-subject-code" style="width: 70%">
+                                        </td>
+                                    </tr>
+                                    <tr style="width: 100%">
+                                        <td class="" style="width: 30%">
+                                            Mã môn học:
+                                        </td>
+                                        <td class="modal-subject-code" style="width: 70%">
 
-                                            </td>
-                                        </tr>
-                                        <tr style="width: 100%">
-                                            <td class="" style="width: 30%">
-                                                Kích hoạt:
-                                            </td>
-                                            <td class="modal-subject-active" style="width: 70%">
+                                        </td>
+                                    </tr>
+                                    <tr style="width: 100%">
+                                        <td class="" style="width: 30%">
+                                            Kích hoạt:
+                                        </td>
+                                        <td class="modal-subject-active" style="width: 70%">
 
-                                            </td>
-                                        </tr>
-                                        <tr style="width: 100%">
-                                            <td class="" style="width: 30%">
-                                                Người tạo:
-                                            </td>
-                                            <td class="modal-subject-userCreate" style="width: 70%">
+                                        </td>
+                                    </tr>
+                                    <tr style="width: 100%">
+                                        <td class="" style="width: 30%">
+                                            Người tạo:
+                                        </td>
+                                        <td class="modal-subject-userCreate" style="width: 70%">
 
-                                            </td>
-                                        </tr>
-                                        <tr style="width: 100%">
-                                            <td class="" style="width: 30%">
-                                                Ngày tạo:
-                                            </td>
-                                            <td class="modal-subject-createdAt" style="width: 70%">
+                                        </td>
+                                    </tr>
+                                    <tr style="width: 100%">
+                                        <td class="" style="width: 30%">
+                                            Ngày tạo:
+                                        </td>
+                                        <td class="modal-subject-createdAt" style="width: 70%">
 
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                    </div>
                 </div>
-                <!-- /.modal-content -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">  
+            <div class="custom-import">
+                <form action="{{ route('admin.import.province') }}" method="POST" name="" enctype="multipart/form-data">
+                    @csrf
+                    <input name="import_file" type="file" class="custom-type-file" id="import-file">
+                    <button class="label-type-file btn btn-success">Import file</button>
+                </form>
+            </div>
         </div>
 
         <div class="col-xs-12">
