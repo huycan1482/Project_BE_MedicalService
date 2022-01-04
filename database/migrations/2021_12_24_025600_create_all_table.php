@@ -97,6 +97,7 @@ class CreateAllTable extends Migration
         });
 
         Schema::create('prioritizations', function (Blueprint $table) {
+            // nhóm người ưu tiên
             $table->bigIncrements('id');
             $table->string('name', 255);
             $table->string('description', 255);
@@ -202,23 +203,32 @@ class CreateAllTable extends Migration
             $table->foreign('org_role_id')->references('id')->on('organization_role')->onDelete('cascade');
         });
 
+        Schema::create('list_injection', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('session_id');
+            $table->integer('status');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('session_id')->references('id')->on('injected_sessions')->onDelete('cascade');
+        });
 
         Schema::create('injections', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('list_injection_id');
             $table->integer('dose');
             $table->unsignedBigInteger('pack_id');
             $table->dateTime('vaccination_date');
-            $table->unsignedBigInteger('session_id');
             $table->string('location', 255);
             $table->text('description')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('list_injection_id')->references('id')->on('list_injection')->onDelete('cascade');
             $table->foreign('pack_id')->references('id')->on('packs')->onDelete('cascade');
-            $table->foreign('session_id')->references('id')->on('injected_sessions')->onDelete('cascade');
             
         });
 
