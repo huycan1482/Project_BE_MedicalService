@@ -109,9 +109,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">STT</th>
+                                <th class="text-center">Mã tỉnh/thành phố</th>
                                 <th class="text-center">Tên</th>
-                                <th class="text-center">Mã tỉnh, thành phố</th>
-                                <th class="text-center">Người tạo</th>
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
@@ -119,9 +118,8 @@
                             @foreach ($provinces as $key => $province)
                             <tr data-id={{ $province->id }}>
                                 <td class="text-center">{{ $key + 1 }}</td>
+                                <td class="text-center">{{ $province->id }}</td>
                                 <td class="text-center">{{ $province->name }}</td>
-                                <td class="text-center">{{ $province->code }}</td>
-                                <td class="text-center">Người tạo</td>
                                 <td class="text-center">
 
                                     <button type="button" class="btn btn-warning btn-detail" data-toggle="modal" data-target="#modal-default" title="Chi tiết" data-id="{{$province->id}}">

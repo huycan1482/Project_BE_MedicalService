@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProvinceRequest;
-use App\Repositories\ProvinceRepository;
+use App\Http\Requests\NationalityRequest;
+use App\Nationality;
 use Illuminate\Http\Request;
+use App\Repositories\NationalityRepository;
 
-class ProvinceController extends ProvinceRepository
+class NationalityController extends NationalityRepository
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +16,9 @@ class ProvinceController extends ProvinceRepository
      */
     public function index()
     {
-        $provinces = $this->getPaginate10();
-        return view ('admin.province.index', [
-            'provinces' => $provinces,
+        $nationalities = $this->getPaginate10();
+        return view ('admin.nationality.index', [
+            'nationalities' => $nationalities,
         ]);
     }
 
@@ -28,7 +29,7 @@ class ProvinceController extends ProvinceRepository
      */
     public function create()
     {
-        return view('admin.province.create');
+        return view ('admin.nationality.create');
     }
 
     /**
@@ -37,7 +38,7 @@ class ProvinceController extends ProvinceRepository
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProvinceRequest $request)
+    public function store(NationalityRequest $request)
     {
         if ($this->createModel($request->all()) != false) {
             return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
@@ -65,14 +66,14 @@ class ProvinceController extends ProvinceRepository
      */
     public function edit($id)
     {
-        $province = $this->find($id);
+        $nationality = $this->find($id);
 
-        if (empty($province)) {
+        if (empty($nationality)) {
             return redirect()->route('admin.errors.404');
         }
 
-        return view('admin.province.edit', [
-            'province' => $province,
+        return view('admin.nationality.edit', [
+            'nationality' => $nationality,
         ]);
     }
 
@@ -83,7 +84,7 @@ class ProvinceController extends ProvinceRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProvinceRequest $request, $id)
+    public function update(NationalityRequest $request, $id)
     {
         if ($this->updateModel($id, $request->all())) {
             return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
@@ -100,11 +101,7 @@ class ProvinceController extends ProvinceRepository
      */
     public function destroy($id)
     {
-        if ($this->deleteModel($id)) {
-            return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
-        } else {
-            return response()->json(['mess' => 'Xóa bản không thành công'], 400);
-        }
+        //
     }
 
     public function forceDelete($id)
@@ -130,9 +127,9 @@ class ProvinceController extends ProvinceRepository
         // if ($currentUser->can('restore', ClassRoom::class)) {
 
             if ($this->restoreModel($id)) {
-                return response()->json(['mess' => 'Khôi bản ghi thành công'], 200);
+                return response()->json(['mess' => 'Khôi phục bản ghi thành công'], 200);
             } else {
-                return response()->json(['mess' => 'Khôi bản không thành công'], 400);
+                return response()->json(['mess' => 'Khôi phục bản không thành công'], 400);
             }
         // } else {
         //     return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);

@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::resource('nationality', 'NationalityController'); 
+    Route::get('nationality/forceDelete/{id}', 'NationalityController@forceDelete')->name('province.forceDelete');
+    Route::get('nationality/restore/{id}', 'NationalityController@restore')->name('province.restore');
+
     Route::resource('province', 'ProvinceController'); 
     Route::get('province/forceDelete/{id}', 'ProvinceController@forceDelete')->name('province.forceDelete');
     Route::get('province/restore/{id}', 'ProvinceController@restore')->name('province.restore');
@@ -24,9 +28,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('district/forceDelete/{id}', 'DistrictController@forceDelete')->name('district.forceDelete');
     Route::get('district/restore/{id}', 'DistrictController@restore')->name('district.restore');
 
-
     // ImportController
-    Route::post('import/province', 'ImportController@importProvince')->name('import.province');
+    // ImportProvince
+    Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
+    // ImportNationality
+    Route::post('import/nationality', 'ImportController@ImportNationality')->name('import.nationality');
 
 
 });

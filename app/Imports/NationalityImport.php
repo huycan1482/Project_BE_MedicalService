@@ -2,11 +2,11 @@
 
 namespace App\Imports;
 
-use App\Province;
+use App\Nationality;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class ProvinceImport implements ToModel
+class NationalityImport implements ToModel
 {
     /**
     * @param array $row
@@ -15,9 +15,10 @@ class ProvinceImport implements ToModel
     */
     public function model(array $row)
     {
-        $province = Province::create([
-            'id' => $row[1],
-            'name' => $row[0],
+        $nationality = Nationality::create([
+            'id' => $row[0],
+            'name' => $row[1],
+            'abbreviation' => $row[2],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

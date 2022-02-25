@@ -43,7 +43,7 @@ function addModel (url, data) {
 
 function updateModel (url, data) {
     $.ajax({
-        type: 'DELETE',
+        type: 'PUT',
         url: url,
         data: data,
         dataType : "json",
