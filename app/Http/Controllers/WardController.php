@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\District;
-use App\Repositories\DistrictRepository;
 use Illuminate\Http\Request;
 
-class DistrictController extends DistrictRepository
+class WardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +13,7 @@ class DistrictController extends DistrictRepository
      */
     public function index()
     {
-        $districts = District::latest()->get();
-        return view ('admin.district.index', [
-            'districts' => $districts,
-        ]);
+        //
     }
 
     /**

@@ -33,6 +33,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
     // ImportNationality
     Route::post('import/nationality', 'ImportController@ImportNationality')->name('import.nationality');
+    // ImportNationality
+    Route::post('import/district', 'ImportController@ImportDistrict')->name('import.district');
 
 
 });

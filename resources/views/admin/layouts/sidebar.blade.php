@@ -29,14 +29,25 @@
           <li class="header">MAIN NAVIGATION</li>
             <li class="active treeview">
                 <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    <i class="fa fa-dashboard"></i> <span>Quản lý danh mục</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                    <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+                    {{-- <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i>Quản lý quốc tịch</a></li> --}}
+                    <li>
+                        <a href="{{ route('admin.nationality.index') }}"><i class="fa-solid fa-earth-asia"></i> Quản lý quốc tịch</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Tỉnh/Thành phố</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Quận/Huyện</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Xã/phường</a>
+                    </li>
                 </ul>
             </li>
         </ul>
