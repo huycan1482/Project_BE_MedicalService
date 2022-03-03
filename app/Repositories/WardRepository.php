@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Province;
+use App\District;
 
-class DistrictRepository extends EloquentRepository
+class WardRepository extends EloquentRepository
 {
      /**
      * get model
@@ -12,7 +12,7 @@ class DistrictRepository extends EloquentRepository
      */
     public function getModel()
     {
-        return \App\District::class;
+        return \App\Ward::class;
     }
 
     public function getPaginate10()
@@ -21,8 +21,8 @@ class DistrictRepository extends EloquentRepository
         return $this->_model->latest()->paginate(10);
     }
 
-    public function getProvinces () 
+    public function getActiveDistricts() 
     {
-        return Province::where('is_active', 1)->get();
+        return District::where('is_active', 1)->get();
     }
 }

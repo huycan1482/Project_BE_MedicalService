@@ -43,10 +43,10 @@
                         <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Tỉnh/Thành phố</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Quận/Huyện</a>
+                        <a href="{{ route('admin.district.index') }}"><i class="fa fa-circle-o"></i> Quản lý Quận/Huyện</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-circle-o"></i> Quản lý Xã/phường</a>
+                        <a href="{{ route('admin.ward.index') }}"><i class="fa fa-circle-o"></i> Quản lý Xã/phường</a>
                     </li>
                 </ul>
             </li>

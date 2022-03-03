@@ -2300,6 +2300,17 @@ a:focus {
 .btn-info.hover {
   background-color: #00acd6;
 }
+
+.btn-purple {
+  background-color: #8e44ad;
+  border-color: #8e44ad;
+}
+.btn-purple:hover,
+.btn-purple:active,
+.btn-purple.hover {
+  background-color: #8e44ad;
+}
+
 .btn-danger {
   background-color: #dd4b39;
   border-color: #d73925;

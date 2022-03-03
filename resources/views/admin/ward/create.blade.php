@@ -1,16 +1,16 @@
 @extends('admin.layouts.main')
 
 @section('header_title')
-<title>Medical Services | Provinces</title>
+<title>Medical Services | Wards</title>
 @endsection
 
 @section('content')
 
 <section class="content-header">
     <h1>
-        Thêm - Tỉnh, Thành phố
+        Thêm - Xã, Phường
         <small>
-            <a href="{{ route('admin.province.index') }}"><span class="label label-success">Danh sách</span></a>
+            <a href="{{ route('admin.ward.index') }}"><span class="label label-success">Danh sách</span></a>
         </small>
     </h1>
 </section>
@@ -23,16 +23,27 @@
 
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Thông tin Tỉnh, Thành phố</h3>
+                    <h3 class="box-title">Thông tin Xã, Phường</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form class="">
                     <div class="box-body">
                         <div class="form-group d-flex" id="form-name">
-                            <label class="" for="name">Tên tỉnh thành phố</label>
+                            <label class="" for="name">Tên Xã, Phường</label>
                             <div>
-                                <input id="name" name="name" type="text" class="form-control" placeholder="Tên tỉnh, thành phố">
+                                <input id="name" name="name" type="text" class="form-control" placeholder="Tên Xã/Phường">
+                            </div>
+                        </div>
+                        <div class="form-group" id="form-district_id">
+                            <label>Quận/Huyện</label>
+                            <div>
+                                <select class=" select2 form-control" style="width: 100%;" name="district_id" id="district_id">
+                                    <option value="">-- Chọn --</option>
+                                    @foreach ($districts as $district)
+                                    <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="checkbox form-group" id="form-is_active">         
@@ -44,8 +55,8 @@
                     <!-- /.box-body -->
 
                     <div class="box-footer">
-                        <a href="javascript:void(0)" class="btn btn-primary add-province">Add</a>
-                        <button type="reset" class="btn btn-danger">Reset</button>
+                        <a href="javascript:void(0)" class="btn btn-primary add-ward">Thêm</a>
+                        <button type="reset" class="btn btn-danger">Tải lại</button>
                     </div>
                 </form>
             </div>
@@ -58,7 +69,8 @@
 @endsection
 
 @section('js')
+<script src="/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="/myAssets/js/myJS.js"></script>
 <script src="/myAssets/js/notice.js"></script>
-<script src="/myAssets/js/province/create.js"></script>
+<script src="/myAssets/js/ward/create.js"></script>
 @endsection

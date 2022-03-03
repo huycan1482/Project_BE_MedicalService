@@ -2,14 +2,14 @@
 
 namespace App\Http\Requests;
 
-use App\Province;
+use App\Ward;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class ProvinceRequest extends FormRequest
+class WardRequest extends FormRequest
 {
     protected $mess = 'Thêm bản ghi lỗi';
 
@@ -41,8 +41,8 @@ class ProvinceRequest extends FormRequest
     public function withValidator (Validator $validator)
     {
         $validator->after(function($validator)
-        {   if ($this->province) {
-                if (!$this->checkProvince()) {
+        {   if ($this->ward) {
+                if (!$this->checkWard()) {
                     $this->mess = 'Thêm bản ghi lỗi, bản ghi không tồn tại';
                     $validator->errors()->add('exception', 'Bản ghi lời không tồn tại');
                 }
@@ -50,10 +50,10 @@ class ProvinceRequest extends FormRequest
         });
     }
 
-    public function checkProvince () {
-        $province = Province::find($this->province);
+    public function checkWard () {
+        $ward = Ward::find($this->ward);
 
-        if (empty($province)) {    
+        if (empty($ward)) {    
             return false;
         } else {
             return true;
@@ -67,15 +67,17 @@ class ProvinceRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->province) {
+        if ($this->ward) {
             return [
-                'name' => 'required|string:255|unique:provinces,name,'.$this->province,
+                'name' => 'required|string:255|unique:wards,name,'.$this->ward,
+                'district_id' => 'required|exists:districts,id',
                 'is_active' => 'required|integer|min:0|max:1'
             ];
         }
 
         return [
-            'name' => 'required|string:255|unique:provinces,name',
+            'name' => 'required|string:255|unique:wards,name',
+            'district_id' => 'required|exists:districts,id',
             'is_active' => 'required|integer|min:0|max:1'
         ];
     }
@@ -86,6 +88,8 @@ class ProvinceRequest extends FormRequest
             'name.required' => 'Yêu cầu không để trống',
             'name.string' => 'Dữ liệu không đúng định dạng',
             'name.unique' => 'Dữ liệu trùng',
+            'district_id.required' => 'Yêu cầu không để trống',
+            'district_id.exists' => 'Dữ liệu không tồn tại',
             'is_active.required' => 'Yêu cầu không để trống',
             'is_active.integer' => 'Dữ liệu ko đúng định dạng',
             'is_active.min' => 'Dữ liệu ko đúng định dạng',

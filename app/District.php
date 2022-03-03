@@ -12,7 +12,28 @@ class District extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name', 'province_id'
+        'id', 'name', 'province_id', 'is_active'
     ];
+
+    protected static function boot() {
+        parent::boot();
+    
+        static::deleting(function($district) {
+            $district->hasManyWards()->delete();
+        });
+
+        static::restoring(function($district) {
+            $district->hasManyWards()->withTrashed()->restore();
+        });
+    }
+
+    public function belongsToProvince () {
+        return $this->belongsTo('App\Province', 'province_id', 'id');
+    }
+
+    public function hasManyWards ()
+    {
+        return $this->hasMany('App\Ward', 'ward_id', 'id');
+    }
 
 }

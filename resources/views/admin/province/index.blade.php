@@ -12,94 +12,57 @@
 @section('content')
 <section class="content-header">
     <h1>
-        Quản lý danh sách Tỉnh, thành phố
-        <small><a href="{{ route('admin.province.create') }}">Thêm mới</a></small>
+        Quản lý danh sách Tỉnh/Thành phố
+        {{-- <small><a href="{{ route('admin.nationality.create') }}">Thêm mới</a></small> --}}
     </h1>
 </section>
 
 <section class="content">
-    <div class="modal fade" id="modal-default">
+
+    <div class="modal fade" id="modal-excel">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Thông tin chi tiết</h4>
+                    <h4 class="modal-title">Nhập dữ liệu qua file Excel</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="box">
-                        <div class="box-body table-responsive no-padding">
-                            <table class="table-hover table table-bordered table-striped dataTable" role="grid"
-                                aria-describedby="example1_info" style="margin-top: 0 !important;">
-                                <tbody>
-                                    <tr style="width: 100%">
-                                        <td class="" style="width: 30%">
-                                            Tên môn học:
-                                        </td>
-                                        <td class="modal-subject-name" style="width: 70%">
-
-                                        </td>
-                                    </tr>
-                                    <tr style="width: 100%">
-                                        <td class="" style="width: 30%">
-                                            Mã môn học:
-                                        </td>
-                                        <td class="modal-subject-code" style="width: 70%">
-
-                                        </td>
-                                    </tr>
-                                    <tr style="width: 100%">
-                                        <td class="" style="width: 30%">
-                                            Kích hoạt:
-                                        </td>
-                                        <td class="modal-subject-active" style="width: 70%">
-
-                                        </td>
-                                    </tr>
-                                    <tr style="width: 100%">
-                                        <td class="" style="width: 30%">
-                                            Người tạo:
-                                        </td>
-                                        <td class="modal-subject-userCreate" style="width: 70%">
-
-                                        </td>
-                                    </tr>
-                                    <tr style="width: 100%">
-                                        <td class="" style="width: 30%">
-                                            Ngày tạo:
-                                        </td>
-                                        <td class="modal-subject-createdAt" style="width: 70%">
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="custom-import">
+                        <form action="{{ route('admin.import.province') }}" method="POST" name="" enctype="multipart/form-data">
+                            @csrf
+                            <label for="">Chọn file Excel</label><br>
+                            <input name="import_file" type="file" class="custom-type-file" id="import-file"><br><br>
+                            <button class="label-type-file btn btn-primary">Nhập file excel</button>
+                        </form>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
                     {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 
     <div class="row">
-        <div class="col-lg-12">  
-            <div class="custom-import">
-                <form action="{{ route('admin.import.province') }}" method="POST" name="" enctype="multipart/form-data">
-                    @csrf
-                    <input name="import_file" type="file" class="custom-type-file" id="import-file">
-                    <button class="label-type-file btn btn-success">Import file</button>
-                </form>
-            </div>
+        <div class="col-lg-12" style="margin-bottom: 10px">  
+            <a class="btn btn-info" href="{{ route('admin.province.create') }}">
+                <i class="fa-solid fa-plus"></i>
+                <span style="margin-left: 5px">Thêm mới</span>
+            </a>
+            <button class="btn btn-success" data-toggle="modal" data-target="#modal-excel">
+                <i class="fa-solid fa-file-excel"></i> 
+                <span style="margin-left: 5px">Nhập file Excel</span>
+            </button>
+            <button class="btn btn-flat bg-navy" onclick="reloadPage()">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span style="margin-left: 5px">Tải lại</span>
+            </button>
         </div>
 
-        <div class="col-xs-12">
-            <div class="box">
+        <div class="col-lg-7">
+            <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách</h3>
                 </div>
@@ -109,8 +72,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">STT</th>
-                                <th class="text-center">Mã tỉnh/thành phố</th>
-                                <th class="text-center">Tên</th>
+                                <th class="text-center">Tên Tỉnh/Thành phố</th>
+                                <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
@@ -118,16 +81,18 @@
                             @foreach ($provinces as $key => $province)
                             <tr data-id={{ $province->id }}>
                                 <td class="text-center">{{ $key + 1 }}</td>
-                                <td class="text-center">{{ $province->id }}</td>
-                                <td class="text-center">{{ $province->name }}</td>
+                                <td class="">{{ $province->name }}</td>
+                                <td class="text-center">
+                                    <span class="label label-{{ ($province->is_active == 1) ? 'success' : 'danger' }}">{{ ($province->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
+                                </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-warning btn-detail" data-toggle="modal" data-target="#modal-default" title="Chi tiết" data-id="{{$province->id}}">
-                                        <i class="fas fa-cog"></i>
+                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$province->id}}">
+                                        <i class="fa-solid fa-eye"></i>
                                     </button>
 
-                                    <a href="{{ route('admin.province.edit', ['id'=> $province->id]) }}" class="btn btn-success" title="Sửa">
-                                        <i class="fa fa-edit"></i>
+                                    <a href="{{ route('admin.province.edit', ['id'=> $province->id]) }}" class="btn btn-warning" title="Sửa">
+                                        <i class="fa-solid fa-pencil"></i>
                                     </a>
 
                                     <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('province', '{{ $province->id }}' )" title="Xóa">
@@ -147,8 +112,9 @@
                 <!-- /.box -->
             </div>
         </div>
-        <div class="col-xs-12">
-            <div class="box">
+
+        <div class="col-lg-5">
+            <div class="box box-danger">
                 <div class="box-header">
                     <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
                     <small>(Tải lại sau khi xóa mềm)</small>
@@ -159,10 +125,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">STT</th>
-                                <th class="text-center">Tên</th>
-                                <th class="text-center">Mã môn</th>
-                                <th class="text-center">Người tạo</th>
-                                <th class="text-center">Trạng thái</th>
+                                <th class="text-center">Tên Tỉnh/Thành phố</th>
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </thead>

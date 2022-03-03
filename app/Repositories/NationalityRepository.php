@@ -15,6 +15,7 @@ class NationalityRepository extends EloquentRepository
 
     public function getPaginate10()
     {
-        return $this->_model->latest()->paginate(10);
+        // return $this->_model->latest()->paginate(10);
+        return $this->_model->orderBy('id', 'asc')->paginate(10);
     }
 }

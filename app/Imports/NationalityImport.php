@@ -19,8 +19,9 @@ class NationalityImport implements ToModel
             'id' => $row[0],
             'name' => $row[1],
             'abbreviation' => $row[2],
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'is_active' => 1,
+            // 'created_at' => Carbon::now(),
+            // 'updated_at' => Carbon::now(),
         ]);
     }
 }

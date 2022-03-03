@@ -34,11 +34,10 @@
                                 <input id="name" name="name" type="text" class="form-control" placeholder="Tên tỉnh, thành phố" value="{{ $province->name }}">
                             </div>
                         </div>
-                        <div class="form-group d-flex" id="form-code">
-                            <label class="" for="code">Mã tỉnh thành phố</label>
-                            <div>
-                                <input id="code" name="code" type="text" class="form-control" placeholder="Mã tỉnh, thành phố" value="{{ $province->code }}">
-                            </div>
+                        <div class="checkbox form-group" id="form-is_active">         
+                            <label>
+                                <input type="checkbox" name="is_active" value="1" {{ ($province->is_active == 1) ? 'checked' : '' }}>Trạng thái hiển thị 
+                            </label>
                         </div>
                     </div>
                     <!-- /.box-body -->

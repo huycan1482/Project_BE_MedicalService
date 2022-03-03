@@ -28,13 +28,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('district/forceDelete/{id}', 'DistrictController@forceDelete')->name('district.forceDelete');
     Route::get('district/restore/{id}', 'DistrictController@restore')->name('district.restore');
 
+    Route::resource('ward', 'WardController'); 
+    Route::get('ward/forceDelete/{id}', 'WardController@forceDelete')->name('ward.forceDelete');
+    Route::get('ward/restore/{id}', 'WardController@restore')->name('ward.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
     // ImportNationality
     Route::post('import/nationality', 'ImportController@ImportNationality')->name('import.nationality');
-    // ImportNationality
+    // ImportDistrict
     Route::post('import/district', 'ImportController@ImportDistrict')->name('import.district');
+    // ImportWard
+    Route::post('import/ward', 'ImportController@ImportWard')->name('import.ward');
 
 
 });

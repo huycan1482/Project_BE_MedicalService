@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WardRequest;
+use App\Repositories\WardRepository;
 use Illuminate\Http\Request;
 
-class WardController extends Controller
+class WardController extends WardRepository
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,10 @@ class WardController extends Controller
      */
     public function index()
     {
-        //
+        $wards = $this->getPaginate10();
+        return view ('admin.ward.index', [
+            'wards' => $wards,
+        ]);
     }
 
     /**
@@ -23,7 +28,10 @@ class WardController extends Controller
      */
     public function create()
     {
-        //
+        $active_districts = $this->getActiveDistricts();
+        return view ('admin.ward.create', [
+            'districts' => $active_districts,
+        ]);
     }
 
     /**
@@ -32,9 +40,13 @@ class WardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WardRequest $request)
     {
-        //
+        if ($this->createModel($request->all()) != false) {
+            return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+        } else {
+            return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+        }
     }
 
     /**
@@ -56,7 +68,18 @@ class WardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ward = $this->find($id);
+
+        if (empty($ward)) {
+            return redirect()->route('admin.errors.404');
+        }
+
+        $active_districts = $this->getActiveDistricts();
+
+        return view('admin.ward.edit', [
+            'ward' => $ward,
+            'districts' => $active_districts,
+        ]);
     }
 
     /**
@@ -66,9 +89,13 @@ class WardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(WardRequest $request, $id)
     {
-        //
+        if ($this->updateModel($id, $request->all())) {
+            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        } else {
+            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+        }
     }
 
     /**
@@ -80,5 +107,37 @@ class WardController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function forceDelete($id)
+    {
+        // $currentUser = User::findOrFail(Auth()->user()->id);
+
+        // if ($currentUser->can('forceDelete', ClassRoom::class)) {
+
+            if ($this->forceDeleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        // } else {
+        //     return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        // }
+    }
+
+    public function restore($id)
+    {
+        // $currentUser = User::findOrFail(Auth()->user()->id);
+
+        // if ($currentUser->can('restore', ClassRoom::class)) {
+
+            if ($this->restoreModel($id)) {
+                return response()->json(['mess' => 'Khôi phục bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Khôi phục bản không thành công'], 400);
+            }
+        // } else {
+        //     return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        // }
     }
 }

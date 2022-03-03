@@ -15,22 +15,26 @@ class CreateAllTable extends Migration
     {
         Schema::create('nationalities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
+            $table->string('abbreviation', 255);
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::create('provinces', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::create('districts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->unsignedBigInteger('province_id');
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
 
@@ -39,18 +43,20 @@ class CreateAllTable extends Migration
 
         Schema::create('wards', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
-            $table->unsignedBigInteger('districts_id');
+            $table->string('name', 255);
+            $table->unsignedBigInteger('district_id');
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('districts_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
         });
         
         Schema::create('diseases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->text('description')->nullable();
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -65,8 +71,9 @@ class CreateAllTable extends Migration
 
         Schema::create('vaccines', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->text('description')->nullable();
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
 
@@ -74,7 +81,7 @@ class CreateAllTable extends Migration
 
         Schema::create('vaccine_disease', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('disease_id');
             $table->timestamps();
@@ -86,7 +93,7 @@ class CreateAllTable extends Migration
 
         Schema::create('vaccine_producer', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('producer_id');
             $table->timestamps();
@@ -126,6 +133,7 @@ class CreateAllTable extends Migration
             // nhóm người ưu tiên
             $table->bigIncrements('id');
             $table->text('description')->nullable();
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -161,6 +169,7 @@ class CreateAllTable extends Migration
             $table->string('name', 255);
             $table->unsignedBigInteger('ward_id');
             $table->text('description');
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
 
@@ -210,6 +219,7 @@ class CreateAllTable extends Migration
             $table->string('job', 255);
             $table->string('work_place', 255);
             $table->text('description')->nullable();
+            $table->integer('is_active');
 
             $table->unsignedBigInteger('role_id');
             $table->timestamps();

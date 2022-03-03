@@ -14,6 +14,6 @@ class Nationality extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name', 'abbreviation'
+        'name', 'abbreviation', 'is_active'
     ];
 }

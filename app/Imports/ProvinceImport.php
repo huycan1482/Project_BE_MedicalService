@@ -18,8 +18,9 @@ class ProvinceImport implements ToModel
         $province = Province::create([
             'id' => $row[1],
             'name' => $row[0],
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'is_active' => 1,
+            // 'created_at' => Carbon::now(),
+            // 'updated_at' => Carbon::now(),
         ]);
     }
 }

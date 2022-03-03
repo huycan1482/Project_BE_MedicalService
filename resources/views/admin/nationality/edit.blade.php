@@ -9,7 +9,9 @@
 <section class="content-header">
     <h1>
         Sửa - Quốc tịch
-        <small><a href="{{ route('admin.nationality.index') }}">Danh sách</a></small>
+        <small>
+            <a href="{{ route('admin.nationality.index') }}"><span class="label label-success">Danh sách</span></a>
+        </small>
     </h1>
 </section>
 
@@ -39,6 +41,11 @@
                             <div>
                                 <input id="abbreviation" name="abbreviation" type="text" class="form-control" placeholder="Tên viết tắt" value="{{ $nationality->abbreviation }}">
                             </div>
+                        </div>
+                        <div class="checkbox form-group" id="form-is_active">         
+                            <label>
+                                <input type="checkbox" name="is_active" value="1" {{ ($nationality->is_active == 1) ? 'checked' : '' }}>Trạng thái hiển thị 
+                            </label>
                         </div>
                     </div>
                     <!-- /.box-body -->

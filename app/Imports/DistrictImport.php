@@ -19,6 +19,7 @@ class DistrictImport implements ToModel
             'id' => $row[2],
             'name' => $row[1],
             'province_id' => $row[0],
+            'is_active' => 1,
             // 'created_at' => Carbon::now(),
             // 'updated_at' => Carbon::now(),
         ]);

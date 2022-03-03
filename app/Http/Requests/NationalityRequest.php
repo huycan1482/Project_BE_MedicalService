@@ -72,12 +72,14 @@ class NationalityRequest extends FormRequest
             return [
                 'name' => 'required|string:255|unique:nationalities,name,'.$this->nationality,
                 'abbreviation' => 'required|string:255|unique:nationalities,abbreviation,'.$this->nationality,
+                'is_active' => 'required|integer|min:0|max:1'
             ];
         }
 
         return [
             'name' => 'required|string:255|unique:nationalities,name',
             'abbreviation' => 'required|string:255|unique:nationalities,abbreviation',
+            'is_active' => 'required|integer|min:0|max:1'
         ];
     }
 
@@ -90,6 +92,10 @@ class NationalityRequest extends FormRequest
             'abbreviation.required' => 'Yêu cầu không để trống',
             'abbreviation.string' => 'Dữ liệu không đúng định dạng',
             'abbreviation.unique' => 'Dữ liệu trùng',
+            'is_active.required' => 'Yêu cầu không để trống',
+            'is_active.integer' => 'Dữ liệu ko đúng định dạng',
+            'is_active.min' => 'Dữ liệu ko đúng định dạng',
+            'is_active.max' => 'Dữ liệu ko đúng định dạng',
         ];
     }
 }
