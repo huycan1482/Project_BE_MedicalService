@@ -36,6 +36,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('disease/forceDelete/{id}', 'DiseaseController@forceDelete')->name('disease.forceDelete');
     Route::get('disease/restore/{id}', 'DiseaseController@restore')->name('disease.restore');
 
+    Route::resource('producer', 'ProducerController'); 
+    Route::get('producer/forceDelete/{id}', 'ProducerController@forceDelete')->name('producer.forceDelete');
+    Route::get('producer/restore/{id}', 'ProducerController@restore')->name('producer.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');

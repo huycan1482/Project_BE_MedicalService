@@ -50,8 +50,28 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> <span>Quản lý dịch bệnh</span></a>
+            
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-solid fa-syringe"></i> <span>Quản lý tiêm chủng</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> <span>Quản lý dịch bệnh</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.producer.index') }}"><i class="fa fa-solid fa-user-tie"></i> Quản lý Nhà sản xuất</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-solid fa-vial"></i> Quản lý loại vaccine</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.district.index') }}"><i class="fa fa-solid fa-barcode"></i></i> Quản lí mã đối tượng ưu tiên</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </section>

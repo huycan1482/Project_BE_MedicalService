@@ -65,6 +65,7 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->string('name', 255);
             $table->text('description')->nullable();
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
         });
