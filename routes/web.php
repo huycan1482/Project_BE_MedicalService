@@ -32,6 +32,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('ward/forceDelete/{id}', 'WardController@forceDelete')->name('ward.forceDelete');
     Route::get('ward/restore/{id}', 'WardController@restore')->name('ward.restore');
 
+    Route::resource('disease', 'DiseaseController'); 
+    Route::get('disease/forceDelete/{id}', 'DiseaseController@forceDelete')->name('disease.forceDelete');
+    Route::get('disease/restore/{id}', 'DiseaseController@restore')->name('disease.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
@@ -41,6 +45,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('import/district', 'ImportController@ImportDistrict')->name('import.district');
     // ImportWard
     Route::post('import/ward', 'ImportController@ImportWard')->name('import.ward');
-
 
 });
