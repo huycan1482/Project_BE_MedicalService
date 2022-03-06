@@ -15,9 +15,16 @@ class DiseaseController extends DiseaseRepository
      */
     public function index()
     {
-        $diseases = $this->getPaginate10();
+        if (empty(request()->all()))
+            $diseases = $this->getPaginate10();
+        else 
+            $diseases = $this->getFilter10(); 
+
         return view ('admin.disease.index', [
-            'diseases' => $diseases
+            'diseases' => $diseases,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 

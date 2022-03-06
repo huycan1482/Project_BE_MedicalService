@@ -15,10 +15,16 @@ class ProducerController extends ProducerRepository
      */
     public function index()
     {
-        $producers = $this->getPaginate10();
+        if (empty(request()->all()))
+            $producers = $this->getPaginate10();
+        else 
+            $producers = $this->getFilter10(); 
 
         return view ('admin.producer.index', [
-            'producers' => $producers
+            'producers' => $producers,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 
