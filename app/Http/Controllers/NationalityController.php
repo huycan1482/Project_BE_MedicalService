@@ -16,9 +16,16 @@ class NationalityController extends NationalityRepository
      */
     public function index()
     {
-        $nationalities = $this->getPaginate10();
+        if (empty(request()->all()))
+            $nationalities = $this->getPaginate10();
+        else 
+            $nationalities = $this->getFilter10(); 
+
         return view ('admin.nationality.index', [
             'nationalities' => $nationalities,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 
