@@ -15,9 +15,16 @@ class WardController extends WardRepository
      */
     public function index()
     {
-        $wards = $this->getPaginate10();
+        if (empty(request()->all()))
+            $wards = $this->getPaginate10();
+        else 
+            $wards = $this->getFilter10();
+
         return view ('admin.ward.index', [
             'wards' => $wards,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 
