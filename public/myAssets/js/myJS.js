@@ -1,5 +1,6 @@
 function reloadPage () {
-    location.reload();
+    // location.reload();
+    window.location = base_url + window.location.pathname;
 }
 
 $.ajaxSetup({

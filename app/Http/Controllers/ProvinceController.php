@@ -15,9 +15,16 @@ class ProvinceController extends ProvinceRepository
      */
     public function index()
     {
-        $provinces = $this->getPaginate10();
+        if (empty(request()->all()))
+            $provinces = $this->getPaginate10();
+        else 
+            $provinces = $this->getFilter10();
+
         return view ('admin.province.index', [
             'provinces' => $provinces,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 
