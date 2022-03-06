@@ -16,9 +16,16 @@ class DistrictController extends DistrictRepository
      */
     public function index()
     {
-        $districts = $this->getPaginate10();
+        if (empty(request()->all()))
+            $districts = $this->getPaginate10();
+        else 
+            $districts = $this->getFilter10();
+
         return view ('admin.district.index', [
             'districts' => $districts,
+            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
         ]);
     }
 
@@ -29,7 +36,7 @@ class DistrictController extends DistrictRepository
      */
     public function create()
     {
-        $provinces = $this->getProvinces();
+        $provinces = $this->getActiveProvinces();
         return view ('admin.district.create', [
             'provinces' => $provinces,
         ]);
@@ -75,7 +82,7 @@ class DistrictController extends DistrictRepository
             return redirect()->route('admin.errors.404');
         }
 
-        $provinces = $this->getProvinces();
+        $provinces = $this->getActiveProvinces();
 
         return view('admin.district.edit', [
             'district' => $district,
