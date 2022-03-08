@@ -131,6 +131,7 @@ class CreateAllTable extends Migration
         Schema::create('priorities', function (Blueprint $table) {
             // nhóm người ưu tiên
             $table->bigIncrements('id');
+            $table->string('name', 255);
             $table->text('description')->nullable();
             $table->integer('is_active');
             $table->timestamps();
