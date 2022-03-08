@@ -40,6 +40,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('producer/forceDelete/{id}', 'ProducerController@forceDelete')->name('producer.forceDelete');
     Route::get('producer/restore/{id}', 'ProducerController@restore')->name('producer.restore');
 
+    Route::resource('vaccine', 'VaccineController'); 
+    Route::get('vaccine/forceDelete/{id}', 'VaccineController@forceDelete')->name('vaccine.forceDelete');
+    Route::get('vaccine/restore/{id}', 'VaccineController@restore')->name('vaccine.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');

@@ -82,7 +82,6 @@ class CreateAllTable extends Migration
 
         Schema::create('vaccine_disease', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255);
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('disease_id');
             $table->timestamps();
@@ -94,7 +93,6 @@ class CreateAllTable extends Migration
 
         Schema::create('vaccine_producer', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255);
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('producer_id');
             $table->timestamps();

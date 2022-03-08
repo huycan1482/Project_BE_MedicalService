@@ -15,8 +15,7 @@ function messageResponse (status, mess) {
 }
 
 
-function messageFade (status, mess, reload)
-{
+function messageFade (status, mess, reload) {
     $("html, body").animate({
         scrollTop: 0
     }, "slow");
@@ -35,8 +34,7 @@ function messageFade (status, mess, reload)
     $('#message').delay(2500).fadeOut();
 }
 
-function messageReload (status, mess, reload) 
-{
+function messageReload (status, mess, reload) {
     $("html, body").animate({
         scrollTop: 0
     }, "slow");
@@ -44,13 +42,11 @@ function messageReload (status, mess, reload)
     var message = "<div class='pad margin no-print col-md-3' id='message' style='position: fixed; right: -5px; z-index:10; top: 40px; width: '><div class='alert alert-" + status + " alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button><h4><i class='icon fa fa-check'></i> Thông báo !</h4>"
     + mess +" <br> "+ reload +" </div></div>";
 
-
     if ( $('#message') ) {
         $('#message').remove();
     }
 
     $('.content-header').after(message);
-
 }
 
 function successResponse (response) {

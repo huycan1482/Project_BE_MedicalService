@@ -66,7 +66,7 @@
                         <a href="{{ route('admin.producer.index') }}"><i class="fa fa-solid fa-user-tie"></i> Quản lý Nhà sản xuất</a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.province.index') }}"><i class="fa fa-solid fa-vial"></i> Quản lý loại vaccine</a>
+                        <a href="{{ route('admin.vaccine.index') }}"><i class="fa fa-solid fa-vial"></i> Quản lý loại vaccine</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.district.index') }}"><i class="fa fa-solid fa-barcode"></i></i> Quản lí mã đối tượng ưu tiên</a>

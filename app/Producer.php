@@ -16,4 +16,9 @@ class Producer extends Model
     protected $fillable = [
         'name', 'description', 'is_active'
     ];
+
+    public function hasManyVaccineProducer ()
+    {
+        return $this->hasMany('App\VaccineProducer', 'vaccine_id', 'id');
+    }
 }
