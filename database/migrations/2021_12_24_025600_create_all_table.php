@@ -167,6 +167,7 @@ class CreateAllTable extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
+            $table->integer('level');
             $table->unsignedBigInteger('ward_id');
             $table->text('description');
             $table->integer('is_active');

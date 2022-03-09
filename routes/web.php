@@ -48,6 +48,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('priority/forceDelete/{id}', 'PriorityController@forceDelete')->name('priority.forceDelete');
     Route::get('priority/restore/{id}', 'PriorityController@restore')->name('priority.restore');
 
+    Route::get('role/getDistrictsByProvinceId/{id}', 'RoleController@getDistrictsByProvinceId')->name('role.getDistrictsByProvinceId');
+    Route::get('role/getWardsByDistrictId/{id}', 'RoleController@getWardsByDistrictId')->name('role.getWardsByDistrictId');
+    Route::resource('role', 'RoleController'); 
+    Route::get('role/forceDelete/{id}', 'RoleController@forceDelete')->name('role.forceDelete');
+    Route::get('role/restore/{id}', 'RoleController@restore')->name('role.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
