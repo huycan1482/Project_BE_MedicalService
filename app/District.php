@@ -33,7 +33,12 @@ class District extends Model
 
     public function hasManyWards ()
     {
-        return $this->hasMany('App\Ward', 'ward_id', 'id');
+        return $this->hasMany('App\Ward', 'district_id', 'id');
+    }
+
+    public function hasManyActiveWards ()
+    {
+        return $this->hasMany('App\Ward', 'district_id', 'id')->where('is_active', 1);
     }
 
 }

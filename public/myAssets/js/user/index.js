@@ -4,6 +4,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.btn-filter', function(e) {
         var name = $('#name').val();
+        var email = $('#email').val();
         var sort = $('#sort').val();
         var status = $('#status').val();
         var level = $('#level').val();
@@ -12,6 +13,7 @@ $(document).ready(function(){
         var ward = $('#ward').val();
 
         name === "" ? urlParams.delete('name') : urlParams.set('name', name);
+        email === "" ? urlParams.delete('email') : urlParams.set('email', email);
         sort === "" ? urlParams.delete('sort') : urlParams.set('sort', sort);
         status === "" ? urlParams.delete('status') : urlParams.set('status', status);
         level === "" ? urlParams.delete('level') : urlParams.set('level', level);

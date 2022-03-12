@@ -24,10 +24,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('province/forceDelete/{id}', 'ProvinceController@forceDelete')->name('province.forceDelete');
     Route::get('province/restore/{id}', 'ProvinceController@restore')->name('province.restore');
 
+    Route::get('district/getDistrictsByProvinceId/{id}', 'DistrictController@getDistrictsByProvinceId')->name('district.getDistrictsByProvinceId');
     Route::resource('district', 'DistrictController'); 
     Route::get('district/forceDelete/{id}', 'DistrictController@forceDelete')->name('district.forceDelete');
     Route::get('district/restore/{id}', 'DistrictController@restore')->name('district.restore');
 
+    Route::get('ward/getWardsByDistrictId/{id}', 'WardController@getWardsByDistrictId')->name('ward.getWardsByDistrictId');
     Route::resource('ward', 'WardController'); 
     Route::get('ward/forceDelete/{id}', 'WardController@forceDelete')->name('ward.forceDelete');
     Route::get('ward/restore/{id}', 'WardController@restore')->name('ward.restore');
@@ -48,11 +50,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('priority/forceDelete/{id}', 'PriorityController@forceDelete')->name('priority.forceDelete');
     Route::get('priority/restore/{id}', 'PriorityController@restore')->name('priority.restore');
 
-    Route::get('role/getDistrictsByProvinceId/{id}', 'RoleController@getDistrictsByProvinceId')->name('role.getDistrictsByProvinceId');
-    Route::get('role/getWardsByDistrictId/{id}', 'RoleController@getWardsByDistrictId')->name('role.getWardsByDistrictId');
+    Route::get('role/getRolesByWardId/{id}', 'RoleController@getRoleByWardId')->name('role.getRolesByWardId'); 
     Route::resource('role', 'RoleController'); 
     Route::get('role/forceDelete/{id}', 'RoleController@forceDelete')->name('role.forceDelete');
     Route::get('role/restore/{id}', 'RoleController@restore')->name('role.restore');
+
+    Route::resource('user', 'UserController'); 
+    Route::get('user/forceDelete/{id}', 'UserController@forceDelete')->name('user.forceDelete');
+    Route::get('user/restore/{id}', 'UserController@restore')->name('user.restore');
 
     // ImportController
     // ImportProvince

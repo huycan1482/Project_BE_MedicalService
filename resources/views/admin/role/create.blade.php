@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
 
 @section('header_title')
-<title>Medical Services | roles</title>
+<title>Medical Services | Roles</title>
 @endsection
 
 @section('content')

@@ -44,7 +44,7 @@ $(document).ready(function(){
         var province_id = $(this).val();
         $.ajax({
             type: "GET",
-            url: base_url + '/admin/role/getDistrictsByProvinceId/' + province_id,
+            url: base_url + '/admin/district/getDistrictsByProvinceId/' + province_id,
             data: "",
             dataType: "JSON",
             success: function (response) {
@@ -64,7 +64,7 @@ $(document).ready(function(){
         var district_id = $(this).val();
         $.ajax({
             type: "GET",
-            url: base_url + '/admin/role/getWardsByDistrictId/' + district_id,
+            url: base_url + '/admin/ward/getWardsByDistrictId/' + district_id,
             data: "",
             dataType: "JSON",
             success: function (response) {

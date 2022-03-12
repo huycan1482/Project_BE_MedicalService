@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\District;
 use App\Province;
 
 class DistrictRepository extends EloquentRepository
@@ -47,5 +48,13 @@ class DistrictRepository extends EloquentRepository
     public function getActiveProvinces () 
     {
         return Province::where('is_active', 1)->get();
+    }
+
+    public function getActiveDistricts ($province_id) {
+        if ($province_id !=0 ) {
+            return District::where([['is_active', '=', 1], ['province_id', '=', $province_id]])->get();
+        } else { 
+            return District::where('is_active', 1)->get();
+        }
     }
 }

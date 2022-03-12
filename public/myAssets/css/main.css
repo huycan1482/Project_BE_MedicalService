@@ -5,3 +5,8 @@
 .custom-import {
     margin-bottom: 10px;
 }
+
+.required-dot {
+    margin-left: 5px;
+    color: #EA2027;
+}

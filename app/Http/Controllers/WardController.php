@@ -147,4 +147,12 @@ class WardController extends WardRepository
         //     return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         // }
     }
+
+    public function getWardsByDistrictId ($id) {
+        return response()->json([
+            'status' => true,
+            'data' => $this->getActiveWards($id),
+        ]);
+    }
+
 }

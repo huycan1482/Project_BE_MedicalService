@@ -60,7 +60,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> <span>Quản lý dịch bệnh</span></a>
+                        <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> Quản lý dịch bệnh</a>
                     </li>
                     <li>
                         <a href="{{ route('admin.producer.index') }}"><i class="fa fa-solid fa-user-tie"></i> Quản lý Nhà sản xuất</a>
@@ -73,7 +73,11 @@
                     </li>
                 </ul>
                 <li>
-                    <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> Quản lí quyền</a>
+                    <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
+                    {{-- <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users"></i> <span>Quản lí người dùng</span></a> --}}
                 </li>
             </li>
         </ul>

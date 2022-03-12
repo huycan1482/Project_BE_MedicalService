@@ -189,6 +189,7 @@ class CreateAllTable extends Migration
             $table->string('name');
             $table->date('date_of_birth');
             $table->string('phone', 255);
+            $table->string('identity_card', 255);
             $table->integer('gender');
             $table->unsignedBigInteger('ward_id');
             $table->string('address', 255);
@@ -202,6 +203,7 @@ class CreateAllTable extends Migration
             $table->unsignedBigInteger('role_id');
             $table->integer('is_active');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
         });
@@ -224,6 +226,7 @@ class CreateAllTable extends Migration
 
             $table->unsignedBigInteger('role_id');
             $table->timestamps();
+            $table->softDeletes();
             
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('cascade');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');

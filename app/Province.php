@@ -31,5 +31,10 @@ class Province extends Model
     {
         return $this->hasMany('App\District', 'province_id', 'id');
     }
+
+    public function hasManyActiveDistricts ()
+    {
+        return $this->hasMany('App\District', 'province_id', 'id')->where('is_active', 1);
+    }
     
 }

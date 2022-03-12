@@ -47,11 +47,11 @@ element.style {}
 }
 
 .form-control {
-    width: 100%;
-    display: inline;
+    /* width: 100%; */
+    /* display: inline; */
     border-radius: 3px !important;
 }
-
+/* 
 .form-group {
     display: flex;
     justify-content: space-between;
@@ -59,14 +59,14 @@ element.style {}
 
 .form-group>div {
     width: 70%;
-}
+} */
 
 /* .select2-container {
     width: 70% !important;
 } */
 
 .select2-selection {
-    border-radius: 5px !important;
+    border-radius: 3px !important;
 }
 
 .sidebar-toggle:hover {

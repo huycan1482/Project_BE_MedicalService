@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\District;
+use App\Ward;
 
 class WardRepository extends EloquentRepository
 {
@@ -47,5 +48,13 @@ class WardRepository extends EloquentRepository
     public function getActiveDistricts() 
     {
         return District::where('is_active', 1)->get();
+    }
+
+    public function getActiveWards ($district_id) {
+        if ($district_id !=0 ) {
+            return Ward::where([['is_active', '=', 1], ['district_id', '=', $district_id]])->get();
+        } else { 
+            return Ward::where('is_active', 1)->get();
+        }
     }
 }

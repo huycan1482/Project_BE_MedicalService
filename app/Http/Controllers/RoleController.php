@@ -22,9 +22,16 @@ class RoleController extends RoleRepository
 
         return view ('admin.role.index', [
             'roles' => $roles,
+            'provinces' => $this->getActiveProvinces(),
+            'districts' => $this->getActiveDistricts(empty(request()->query('province')) ? 0 : request()->query('province')),
+            'wards' => $this->getActiveWards(empty(request()->query('district')) ? 0 : request()->query('district')),
             'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
             'status' => empty(request()->query('status')) ? '' : request()->query('status'),
             'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+            'level' => empty(request()->query('level')) ? '' : request()->query('level'),
+            'province' => empty(request()->query('province')) ? '' : request()->query('province'),
+            'district' => empty(request()->query('district')) ? '' : request()->query('district'),
+            'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
         ]);
     }
 
@@ -118,17 +125,10 @@ class RoleController extends RoleRepository
         //
     }
 
-    public function getDistrictsByProvinceId ($id) {
+    public function getRoleByWardId ($id) {
         return response()->json([
             'status' => true,
-            'data' => $this->getActiveDistricts($id),
-        ]);
-    }
-
-    public function getWardsByDistrictId ($id) {
-        return response()->json([
-            'status' => true,
-            'data' => $this->getActiveWards($id),
+            'data' => $this->getActiveRole($id),
         ]);
     }
 }

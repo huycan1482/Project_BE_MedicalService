@@ -152,4 +152,11 @@ class DistrictController extends DistrictRepository
         //     return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         // }
     }
+
+    public function getDistrictsByProvinceId ($id) {
+        return response()->json([
+            'status' => true,
+            'data' => $this->getActiveDistricts($id),
+        ]);
+    }
 }
