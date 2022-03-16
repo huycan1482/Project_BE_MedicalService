@@ -1,0 +1,25 @@
+.container {
+    height: 100vh;
+}
+
+.error-div, .error-general {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #f1c40f;
+    height: 100%;
+}
+
+.error-div h1 {
+    text-align: center;
+    font-size: 10rem;
+}
+
+.error-div p {
+    font-size: 3rem;
+}
+
+.error-general {
+    font-size: 50px;
+}

@@ -6,9 +6,16 @@ use App\Http\Requests\NationalityRequest;
 use App\Nationality;
 use Illuminate\Http\Request;
 use App\Repositories\NationalityRepository;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class NationalityController extends NationalityRepository
 {
+    public $current_user;
+
+    public function __construct() {
+        $this->current_user = User::find(Auth::user()->id);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,17 +23,21 @@ class NationalityController extends NationalityRepository
      */
     public function index()
     {
-        if (empty(request()->all()))
-            $nationalities = $this->getPaginate10();
-        else 
-            $nationalities = $this->getFilter10(); 
+        if ($this->current_user->can('viewAny', User::class)) {
+            if (empty(request()->all()))
+                $nationalities = $this->getPaginate10();
+            else 
+                $nationalities = $this->getFilter10(); 
 
-        return view ('admin.nationality.index', [
-            'nationalities' => $nationalities,
-            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
-            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
-            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
-        ]);
+            return view ('admin.nationality.index', [
+                'nationalities' => $nationalities,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+            ]);
+        } else {
+
+        }
     }
 
     /**

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends UserRepository
 {
@@ -85,19 +87,23 @@ class UserController extends UserRepository
      */
     public function edit($id)
     {
+        $current_user = User::find(Auth::user()->id);
+
         $user = $this->find($id);
 
         if (empty($user)) {
             return redirect()->route('admin.errors.404');
         }
 
-        return view('admin.user.edit', [
-            'user' => $user,
-            'provinces' => $this->getActiveProvinces(),
-            'districts' => $this->getActiveDistricts(0),
-            'wards' => $this->getActiveWards(0),
-            'roles' => $this->getActiveRoles(0),
-        ]);
+        if ($current_user->can('update', User::class) || $current_user->can('updateProfile', $user)) {
+            return view('admin.user.edit', [
+                'user' => $user,
+                'provinces' => $this->getActiveProvinces(),
+                'districts' => $this->getActiveDistricts(0),
+                'wards' => $this->getActiveWards(0),
+                'roles' => $this->getActiveRoles(0),
+            ]);
+        }
     }
 
     /**

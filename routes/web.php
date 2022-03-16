@@ -73,4 +73,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     // ImportWard
     Route::post('import/ward', 'ImportController@ImportWard')->name('import.ward');
 
+
+    //Errors Controller 
+    Route::get('/404', function () {
+        return view ('errors.4xx', [
+            'status' => '404!',
+            'msg' => 'Trang bạn tìm kiếm không tồn tại'
+        ]);
+    })->name('errors.4xx');
+
 });

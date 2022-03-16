@@ -19,7 +19,7 @@
             <ul class="nav navbar-nav">
                 <!-- Messages: style can be found in dropdown.less-->
                 <li><a href=" "><i class="fas fa-home"></i></a></li>
-                <li class="dropdown messages-menu">
+                {{-- <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope"></i>
                         <span class="label label-success">4</span>
@@ -230,7 +230,7 @@
                         </li>
                     </ul>
                 </li>
-                <!-- User Account: style can be found in dropdown.less -->
+                <!-- User Account: style can be found in dropdown.less --> --}}
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         {{-- <img src=" {{Auth::user()->avatar}} " class="user-image" alt="User Image"> --}}
@@ -266,7 +266,7 @@
                         <li class="user-footer">
                             <div class="pull-left">
                                 {{-- <a href="{{ route('admin.user.edit', ['id' => Auth::user()->id ]) }}" class="btn btn-default btn-flat">Profile</a> --}}
-                                <a href="" class="btn btn-default btn-flat">Thông tin cá nhân</a>
+                                <a href="{{ route('admin.user.edit', ['id' => Auth::user()->id ]) }}" class="btn btn-default btn-flat">Thông tin cá nhân</a>
                             </div>
                             <div class="pull-right">
                                 <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Đăng xuất</a>
@@ -275,9 +275,9 @@
                     </ul>
                 </li>
                 <!-- Control Sidebar Toggle Button -->
-                <li>
+                {{-- <li>
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </nav>

@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <link rel="shortcut icon" href="myAssets/image/icon.png">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -128,7 +131,8 @@
         <div class="glass">
             <div class="box">
                 <div class="box-header">
-                    <i class="fa-solid fa-house-medical"></i>
+                    <img src="myAssets/image/icon.png" alt="web icon"  width="50px">
+                    {{-- <i class="fa-solid fa-house-medical"></i> --}}
                     <p class="box-title">
                         Medical Service
                     </p>
