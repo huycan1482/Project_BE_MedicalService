@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class NationalityController extends NationalityRepository
 {
-    public $current_user;
-
-    public function __construct() {
-        $this->current_user = User::find(Auth::user()->id);
-    }
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +18,9 @@ class NationalityController extends NationalityRepository
      */
     public function index()
     {
-        if ($this->current_user->can('viewAny', User::class)) {
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
             if (empty(request()->all()))
                 $nationalities = $this->getPaginate10();
             else 
@@ -36,7 +33,7 @@ class NationalityController extends NationalityRepository
                 'name' => empty(request()->query('name')) ? '' : request()->query('name'),
             ]);
         } else {
-
+            return redirect()->route('admin.errors.4xx');
         }
     }
 
@@ -47,7 +44,13 @@ class NationalityController extends NationalityRepository
      */
     public function create()
     {
-        return view ('admin.nationality.create');
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            return view ('admin.nationality.create');
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
     }
 
     /**
@@ -58,11 +61,17 @@ class NationalityController extends NationalityRepository
      */
     public function store(NationalityRequest $request)
     {
-        if ($this->createModel($request->all()) != false) {
-            return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->createModel($request->all()) != false) {
+                return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+            }
         } else {
-            return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
-        }
+            return response()->json(['mess' => 'Thêm bản ghi lỗi, bạn không đủ thẩm quyền'], 403); 
+        }   
     }
 
     /**
@@ -84,15 +93,24 @@ class NationalityController extends NationalityRepository
      */
     public function edit($id)
     {
-        $nationality = $this->find($id);
 
-        if (empty($nationality)) {
-            return redirect()->route('admin.errors.404');
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $nationality = $this->find($id);
+
+            if (empty($nationality)) {
+                return redirect()->route('admin.errors.404');
+            }
+
+            return view('admin.nationality.edit', [
+                'nationality' => $nationality,
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
         }
 
-        return view('admin.nationality.edit', [
-            'nationality' => $nationality,
-        ]);
+        
     }
 
     /**
@@ -104,10 +122,16 @@ class NationalityController extends NationalityRepository
      */
     public function update(NationalityRequest $request, $id)
     {
-        if ($this->updateModel($id, $request->all())) {
-            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->updateModel($id, $request->all())) {
+                return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            }
         } else {
-            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            return response()->json(['mess' => 'Sửa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         }
     }
 
@@ -119,7 +143,13 @@ class NationalityController extends NationalityRepository
      */
     public function destroy($id)
     {
-        //
+        // $current_user = User::find(Auth::user()->id);
+
+        // if ($current_user->can('viewAny', User::class)) {
+        //     return view ('admin.nationality.create');
+        // } else {
+        //     return redirect()->route('admin.errors.4xx');
+        // }
     }
 
     public function forceDelete($id)

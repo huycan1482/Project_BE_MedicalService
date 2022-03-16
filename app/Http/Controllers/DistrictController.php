@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\District;
 use App\Http\Requests\DistrictRequest;
 use App\Repositories\DistrictRepository;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DistrictController extends DistrictRepository
 {
@@ -16,17 +18,23 @@ class DistrictController extends DistrictRepository
      */
     public function index()
     {
-        if (empty(request()->all()))
-            $districts = $this->getPaginate10();
-        else 
-            $districts = $this->getFilter10();
+        $current_user = User::find(Auth::user()->id);
 
-        return view ('admin.district.index', [
-            'districts' => $districts,
-            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
-            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
-            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
-        ]);
+        if ($current_user->can('viewAny', User::class)) {
+            if (empty(request()->all()))
+                $districts = $this->getPaginate10();
+            else 
+                $districts = $this->getFilter10();
+
+            return view ('admin.district.index', [
+                'districts' => $districts,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
     }
 
     /**
@@ -36,10 +44,17 @@ class DistrictController extends DistrictRepository
      */
     public function create()
     {
-        $provinces = $this->getActiveProvinces();
-        return view ('admin.district.create', [
-            'provinces' => $provinces,
-        ]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $provinces = $this->getActiveProvinces();
+
+            return view ('admin.district.create', [
+                'provinces' => $provinces,
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }        
     }
 
     /**
@@ -50,10 +65,16 @@ class DistrictController extends DistrictRepository
      */
     public function store(DistrictRequest $request)
     {
-        if ($this->createModel($request->all()) != false) {
-            return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->createModel($request->all()) != false) {
+                return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+            }
         } else {
-            return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+            return response()->json(['mess' => 'Thêm bản ghi lỗi, bạn không đủ thẩm quyền'], 403); 
         }
     }
 
@@ -76,18 +97,26 @@ class DistrictController extends DistrictRepository
      */
     public function edit($id)
     {
-        $district = $this->find($id);
+        $current_user = User::find(Auth::user()->id);
 
-        if (empty($district)) {
-            return redirect()->route('admin.errors.404');
+        if ($current_user->can('viewAny', User::class)) {
+            $district = $this->find($id);
+
+            if (empty($district)) {
+                return redirect()->route('admin.errors.404');
+            }
+
+            $provinces = $this->getActiveProvinces();
+
+            return view('admin.district.edit', [
+                'district' => $district,
+                'provinces' => $provinces
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
         }
 
-        $provinces = $this->getActiveProvinces();
-
-        return view('admin.district.edit', [
-            'district' => $district,
-            'provinces' => $provinces
-        ]);
+        
     }
 
     /**
@@ -99,10 +128,16 @@ class DistrictController extends DistrictRepository
      */
     public function update(Request $request, $id)
     {
-        if ($this->updateModel($id, $request->all())) {
-            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->updateModel($id, $request->all())) {
+                return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            }
         } else {
-            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            return response()->json(['mess' => 'Sửa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         }
     }
 

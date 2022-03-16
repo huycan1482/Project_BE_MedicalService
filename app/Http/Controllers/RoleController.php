@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleRequest;
 use App\Repositories\RoleRepository;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends RoleRepository
 {
@@ -15,24 +17,31 @@ class RoleController extends RoleRepository
      */
     public function index()
     {
-        if (empty(request()->all()))
-            $roles = $this->getPaginate10();
-        else 
-            $roles = $this->getFilter10(); 
+        $current_user = User::find(Auth::user()->id);
 
-        return view ('admin.role.index', [
-            'roles' => $roles,
-            'provinces' => $this->getActiveProvinces(),
-            'districts' => $this->getActiveDistricts(empty(request()->query('province')) ? 0 : request()->query('province')),
-            'wards' => $this->getActiveWards(empty(request()->query('district')) ? 0 : request()->query('district')),
-            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
-            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
-            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
-            'level' => empty(request()->query('level')) ? '' : request()->query('level'),
-            'province' => empty(request()->query('province')) ? '' : request()->query('province'),
-            'district' => empty(request()->query('district')) ? '' : request()->query('district'),
-            'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
-        ]);
+        if ($current_user->can('viewAny', User::class)) {
+            if (empty(request()->all()))
+                $roles = $this->getPaginate10();
+            else 
+                $roles = $this->getFilter10(); 
+
+            return view ('admin.role.index', [
+                'roles' => $roles,
+                'provinces' => $this->getActiveProvinces(),
+                'districts' => $this->getActiveDistricts(empty(request()->query('province')) ? 0 : request()->query('province')),
+                'wards' => $this->getActiveWards(empty(request()->query('district')) ? 0 : request()->query('district')),
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+                'level' => empty(request()->query('level')) ? '' : request()->query('level'),
+                'province' => empty(request()->query('province')) ? '' : request()->query('province'),
+                'district' => empty(request()->query('district')) ? '' : request()->query('district'),
+                'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+        
     }
 
     /**
@@ -42,11 +51,18 @@ class RoleController extends RoleRepository
      */
     public function create()
     {
-        return view ('admin.role.create', [
-            'wards' => $this->getActiveWards(0),
-            'districts' => $this->getActiveDistricts(0),
-            'provinces' => $this->getActiveProvinces(),
-        ]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            return view ('admin.role.create', [
+                'wards' => $this->getActiveWards(0),
+                'districts' => $this->getActiveDistricts(0),
+                'provinces' => $this->getActiveProvinces(),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+        
     }
 
     /**
@@ -57,11 +73,18 @@ class RoleController extends RoleRepository
      */
     public function store(RoleRequest $request)
     {
-        if ($this->createModel($request->all()) != false) {
-            return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->createModel($request->all()) != false) {
+                return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+            }
         } else {
-            return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+            return redirect()->route('admin.errors.4xx');
         }
+        
     }
 
     /**
@@ -83,19 +106,25 @@ class RoleController extends RoleRepository
      */
     public function edit($id)
     {
-        $role = $this->find($id);
+        $current_user = User::find(Auth::user()->id);
 
-        // dd($role->belongsToWard->belongsToDistrict->id);
-        if (empty($role)) {
-            return redirect()->route('admin.errors.404');
+        if ($current_user->can('viewAny', User::class)) {
+            $role = $this->find($id);
+
+            if (empty($role)) {
+                return redirect()->route('admin.errors.404');
+            }
+
+            return view('admin.role.edit', [
+                'role' => $role,
+                'wards' => $this->getActiveWards(0),
+                'districts' => $this->getActiveDistricts(0),
+                'provinces' => $this->getActiveProvinces(),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
         }
-
-        return view('admin.role.edit', [
-            'role' => $role,
-            'wards' => $this->getActiveWards(0),
-            'districts' => $this->getActiveDistricts(0),
-            'provinces' => $this->getActiveProvinces(),
-        ]);
+        
     }
 
     /**
@@ -107,11 +136,18 @@ class RoleController extends RoleRepository
      */
     public function update(RoleRequest $request, $id)
     {
-        if ($this->updateModel($id, $request->all())) {
-            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            if ($this->updateModel($id, $request->all())) {
+                return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+            } else {
+                return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            }
         } else {
-            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            return response()->json(['mess' => 'Sửa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         }
+        
     }
 
     /**

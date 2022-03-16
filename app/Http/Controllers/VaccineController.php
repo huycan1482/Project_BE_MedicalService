@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\vaccineRequest;
 use App\Repositories\VaccineRepository;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VaccineController extends VaccineRepository
@@ -17,17 +19,24 @@ class VaccineController extends VaccineRepository
      */
     public function index()
     {
-        if (empty(request()->all()))
-            $vaccines = $this->getPaginate10();
-        else 
-            $vaccines = $this->getFilter10(); 
+        $current_user = User::find(Auth::user()->id);
 
-        return view ('admin.vaccine.index', [
-            'vaccines' => $vaccines,
-            'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
-            'status' => empty(request()->query('status')) ? '' : request()->query('status'),
-            'name' => empty(request()->query('name')) ? '' : request()->query('name'),
-        ]);
+        if ($current_user->can('viewAny', User::class)) {
+            if (empty(request()->all()))
+                $vaccines = $this->getPaginate10();
+            else 
+                $vaccines = $this->getFilter10(); 
+
+            return view ('admin.vaccine.index', [
+                'vaccines' => $vaccines,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+        
     }
 
     /**
@@ -37,10 +46,17 @@ class VaccineController extends VaccineRepository
      */
     public function create()
     {
-        return view ('admin.vaccine.create', [
-            'producers' => $this->getActiveProducers(),
-            'diseases' => $this->getActiveDiseases(),
-        ]);
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            return view ('admin.vaccine.create', [
+                'producers' => $this->getActiveProducers(),
+                'diseases' => $this->getActiveDiseases(),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+        
     }
 
     /**
@@ -51,31 +67,37 @@ class VaccineController extends VaccineRepository
      */
     public function store(VaccineRequest $request)
     {
-        // bắt đầu Rollback
-        DB::beginTransaction();
+        $current_user = User::find(Auth::user()->id);
 
-        try {
-            $vaccine_id = $this->createVaccine($request);
-            //Tao ban ghi moi cho bang vaccine tra ve id ban ghi moi
+        if ($current_user->can('viewAny', User::class)) {
+            // bắt đầu Rollback
+            DB::beginTransaction();
 
-            if ($vaccine_id == 0) 
-                throw new Exception();
+            try {
+                $vaccine_id = $this->createVaccine($request);
+                //Tao ban ghi moi cho bang vaccine tra ve id ban ghi moi
 
-            if (!$this->createVaccineProducer($request->input('producer_id'), $vaccine_id))
-                throw new Exception();
-                //Them du lieu vao bang trung gian vaccine_producer
+                if ($vaccine_id == 0) 
+                    throw new Exception();
 
-            if (!$this->createVaccineDisease($request->input('disease_id'), $vaccine_id))
-                throw new Exception();    
-                //Them du lieu vao bang trung gian vaccine_disease
+                if (!$this->createVaccineProducer($request->input('producer_id'), $vaccine_id))
+                    throw new Exception();
+                    //Them du lieu vao bang trung gian vaccine_producer
 
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502);
-        }
+                if (!$this->createVaccineDisease($request->input('disease_id'), $vaccine_id))
+                    throw new Exception();    
+                    //Them du lieu vao bang trung gian vaccine_disease
 
-        return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502);
+            }
+
+            return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
+        } else {
+            return response()->json(['mess' => 'Thêm bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        } 
     }
 
     /**
@@ -97,17 +119,24 @@ class VaccineController extends VaccineRepository
      */
     public function edit($id)
     {
-        $vaccine = $this->find($id);
+        $current_user = User::find(Auth::user()->id);
 
-        if (empty($vaccine)) {
-            return redirect()->route('admin.errors.404');
+        if ($current_user->can('viewAny', User::class)) {
+            $vaccine = $this->find($id);
+
+            if (empty($vaccine)) {
+                return redirect()->route('admin.errors.404');
+            }
+
+            return view('admin.vaccine.edit', [
+                'vaccine' => $vaccine,
+                'producers' => $this->getActiveProducers(),
+                'diseases' => $this->getActiveDiseases(),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
         }
-
-        return view('admin.vaccine.edit', [
-            'vaccine' => $vaccine,
-            'producers' => $this->getActiveProducers(),
-            'diseases' => $this->getActiveDiseases(),
-        ]);
+        
     }
 
     /**
@@ -119,28 +148,35 @@ class VaccineController extends VaccineRepository
      */
     public function update(vaccineRequest $request, $id)
     {
-        // bắt đầu Rollback
-        DB::beginTransaction();
+        $current_user = User::find(Auth::user()->id);
 
-        try {
-            if (!$this->updateVaccine($request, $id)) 
-                throw new Exception();
-                //Sua du lieu bang vaccine 
-            if (!$this->updateVaccineProducer($request->input('producer_id'), $id))
-                throw new Exception();
-                //Sua du lieu vao bang trung gian vaccine_producer
+        if ($current_user->can('viewAny', User::class)) {
+            // bắt đầu Rollback
+            DB::beginTransaction();
 
-            if (!$this->updateVaccineDisease($request->input('disease_id'), $id))
-                throw new Exception();    
-                //Sua du lieu vao bang trung gian vaccine_disease
+            try {
+                if (!$this->updateVaccine($request, $id)) 
+                    throw new Exception();
+                    //Sua du lieu bang vaccine 
+                if (!$this->updateVaccineProducer($request->input('producer_id'), $id))
+                    throw new Exception();
+                    //Sua du lieu vao bang trung gian vaccine_producer
 
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+                if (!$this->updateVaccineDisease($request->input('disease_id'), $id))
+                    throw new Exception();    
+                    //Sua du lieu vao bang trung gian vaccine_disease
+
+                DB::commit();
+            } catch (Exception $e) {
+                DB::rollBack();
+                return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+            }
+
+            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        } else {
+            return response()->json(['mess' => 'Sửa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         }
-
-        return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        
     }
 
     /**
