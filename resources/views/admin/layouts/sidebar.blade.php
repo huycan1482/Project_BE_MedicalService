@@ -52,7 +52,7 @@
             
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa-solid fa-syringe"></i> <span>Quản lý tiêm chủng</span>
+                    <i class="fa fa-solid fa-vial-virus"></i><span>Quản lý Vaccine</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -71,13 +71,28 @@
                         <a href="{{ route('admin.priority.index') }}"><i class="fa fa-solid fa-barcode"></i> Quản lí mã đối tượng ưu tiên</a>
                     </li>
                 </ul>
-                <li>
-                    <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
-                    {{-- <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users"></i> <span>Quản lí người dùng</span></a> --}}
-                </li>
+            </li>
+            <li>
+                <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
+            </li>
+            <li>
+                <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
+            </li>
+            <li>
+                <a href="{{ route('admin.resident.index') }}"><i class="fa fa-solid fa-users"></i> <span>Quản lí dân cư</span></a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-solid fa-syringe"></i><span>Quản lí tiêm chủng</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> Quản lý dịch bệnh</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </section>

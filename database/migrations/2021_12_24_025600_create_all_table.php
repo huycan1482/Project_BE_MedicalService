@@ -219,8 +219,8 @@ class CreateAllTable extends Migration
             $table->unsignedBigInteger('nationality_id');
             $table->unsignedBigInteger('ward_id');
             $table->string('address', 255);
-            $table->string('job', 255);
-            $table->string('work_place', 255);
+            $table->string('job', 255)->nullable();
+            $table->string('work_place', 255)->nullable();
             $table->text('description')->nullable();
             $table->integer('is_active');
 
