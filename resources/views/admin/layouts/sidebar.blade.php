@@ -90,7 +90,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="{{ route('admin.disease.index') }}"><i class="fa fa-solid fa-virus-covid"></i> Quản lý dịch bệnh</a>
+                        <a href="{{ route('admin.session.index') }}"><i class="fa fa-solid fa-list-check"></i> Quản lý buổi tiêm</a>
                     </li>
                 </ul>
             </li>

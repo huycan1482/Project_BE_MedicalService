@@ -68,7 +68,7 @@ class ResidentRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this);
+        dd($this->resident,$this->route('resident'), request()->route('id'));
         // dd($this->all(), $this);
         if ($this->resident) {
             return [

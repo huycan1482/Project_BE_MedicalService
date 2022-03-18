@@ -67,6 +67,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('resident/forceDelete/{id}', 'ResidentController@forceDelete')->name('resident.forceDelete');
     Route::get('resident/restore/{id}', 'ResidentController@restore')->name('resident.restore');
 
+    Route::resource('session', 'SessionController'); 
+    Route::get('session/forceDelete/{id}', 'SessionController@forceDelete')->name('session.forceDelete');
+    Route::get('session/restore/{id}', 'SessionController@restore')->name('session.restore');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');

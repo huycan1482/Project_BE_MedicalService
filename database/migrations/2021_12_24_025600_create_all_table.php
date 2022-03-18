@@ -273,6 +273,7 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->date('start_at');
             $table->date('end_at');
+            $table->unsignedBigInteger('ward_id');
             $table->string('address', 255);
             $table->integer('quantity');
             $table->integer('actual_quantity');
@@ -280,6 +281,7 @@ class CreateAllTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
         });
 
         Schema::create('objects', function (Blueprint $table) {

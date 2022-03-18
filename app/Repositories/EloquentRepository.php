@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\RepositoryInterface;
 use App\User;
 use Exception;
+use App\Http\Controllers\Controller;
 
 abstract class EloquentRepository implements RepositoryInterface
 {

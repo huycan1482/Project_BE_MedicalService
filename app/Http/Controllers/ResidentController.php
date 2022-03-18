@@ -137,7 +137,7 @@ class ResidentController extends ResidentRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ResidentRequest $request, $id)
     {
         //
     }
