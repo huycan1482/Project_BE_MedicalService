@@ -72,5 +72,5 @@
 <script src="/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="/myAssets/js/myJS.js"></script>
 <script src="/myAssets/js/notice.js"></script>
-<script src="/myAssets/js/district/create.js"></script>
+<script src="/myAssets/js/injection/create.js"></script>
 @endsection

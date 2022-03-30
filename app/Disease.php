@@ -19,4 +19,9 @@ class Disease extends Model
     {
         return $this->hasMany('App\VaccineDisease', 'vaccine_id', 'id');
     }
+
+    public function belongsToManyActiveVaccines () {
+        return $this->belongsToMany('App\Vaccine', 'vaccine_disease', 'disease_id', 'vaccine_id')->where('is_active', 1)->withPivot('id', 'vaccine_id', 'disease_id', 'created_at', 'updated_at', 'deleted_at');
+    }
+    // lấy dữ liệu bảng n-n vaccines dc active
 }

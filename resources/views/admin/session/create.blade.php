@@ -4,8 +4,12 @@
 <title>Medical Services | Sessions</title>
 @endsection
 
-@section('content')
+@section('css')
+<!-- Theme style -->
+<link rel="stylesheet" href="AdminLTE/dist/css/AdminLTE.min.css">
+@endsection
 
+@section('content')
 <section class="content-header">
     <h1>
         Thêm - Buổi tiêm
@@ -43,25 +47,14 @@
                                     <input id="end_at" name="end_at" type="date" class="form-control" placeholder="Thời gian kết thúc">
                                 </div>
                             </div>
-                            <div class="form-group col-lg-12 d-flex" id="form-address">
+                            <div class="form-group col-lg-6 d-flex" id="form-address">
                                 <label class="" for="address">Địa điểm tiêm chi tiết<span class="required-dot">**</span></label>
                                 <div>
                                     <input id="address" name="address" type="text" class="form-control" placeholder="Địa điểm chi tiết">
                                 </div>
                             </div>
-                            <div class="form-group d-flex col-lg-4" id="form-quantity">
-                                <label class="" for="quantity">Số lượng dự kiến<span class="required-dot">**</span></label>
-                                <div>
-                                    <input id="quantity" name="quantity" type="number" class="form-control" placeholder="Số lượng dự kiến">
-                                </div>
-                            </div>
-                            <div class="form-group d-flex col-lg-4" id="form-actual_quantity">
-                                <label class="" for="actual_quantity">Số lượng thực tế<span class="required-dot">**</span></label>
-                                <div>
-                                    <input id="actual_quantity" name="actual_quantity" type="number" class="form-control" placeholder="Số lượng thực tế">
-                                </div>
-                            </div>
-                            <div class="form-group d-flex col-lg-4" id="form-status_id">
+                            
+                            <div class="form-group d-flex col-lg-6" id="form-status_id">
                                 <label class="" for="status_id">Tình trạng <span class="required-dot">**</span></label>
                                 <div>
                                     <select class="form-control" name="status_id" id="status_id">
@@ -71,6 +64,24 @@
                                         <option value="2">Hoàn thành</option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="form-group col-lg-6 " id="form-disease_id">
+                                <label for="">Chọn dịch bệnh <span class="required-dot">**</span></label>
+                                    <select class="form-control select2" data-placeholder="Chọn dịch bệnh" style="width: 100%;" name="disease_id" id="disease_id">
+                                        <option value="">-- Chọn --</option>
+                                        @foreach ($diseases as $disease)
+                                        <option value="{{ $disease->id }}">{{ $disease->name }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div class="form-group col-lg-6" id="form-vaccine_id">
+                                <label for="">Chọn Vaccine <span class="required-dot">**</span></label>
+                                    <select class="form-control select2" multiple="multiple" data-placeholder="Chọn vaccine" style="width: 100%;" name="vaccine_id" id="vaccine_id">
+                                        <option value="">-- Chọn --</option>
+                                        @foreach ($vaccines as $vaccine)
+                                        <option value="{{ $vaccine->id }}">{{ $vaccine->name }}</option>
+                                        @endforeach
+                                    </select>
                             </div>
                         </div>
                         
@@ -92,6 +103,7 @@
 @endsection
 
 @section('js')
+<script src="/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="/myAssets/js/myJS.js"></script>
 <script src="/myAssets/js/notice.js"></script>
 <script src="/myAssets/js/session/create.js"></script>

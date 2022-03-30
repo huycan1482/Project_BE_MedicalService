@@ -43,7 +43,6 @@
                                     <option value="2" {{ $role->level == 2 ? 'selected' : '' }}>Trạm trưởng</option>
                                     <option value="3" {{ $role->level == 3 ? 'selected' : '' }}>Nhân viên trạm y tế</option>
                                     <option value="4" {{ $role->level == 4 ? 'selected' : '' }}>Nhân viên ủy ban phường</option>
-                                    <option value="5" {{ $role->level == 5 ? 'selected' : '' }}>Công dân sinh sống trong khu vực</option>
                                 </select>
                             </div>
                         </div>

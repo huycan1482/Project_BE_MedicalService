@@ -46,4 +46,20 @@ class Vaccine extends Model
     }
     // lấy dữ liệu bảng n-n producers dc active
 
+    // public static function getDiseasesName($vaccine_id) {
+    //     $arr_name = Disease::select('diseases.name')
+    //     ->join('vaccine_disease', 'vaccine_disease.disease_id', '=', 'diseases.id')
+    //     ->where('vaccine_disease.vaccine_id', $vaccine_id)
+    //     ->get()->toArray();
+
+    //     $str_name = "";
+    //     foreach ($arr_name as $key => $item) {
+    //         if ($key == 0)
+    //             $str_name .= $item['name'];
+    //         else 
+    //             $str_name .= ', '.$item['name'];
+    //     }
+
+    //     return $str_name;
+    // }
 }

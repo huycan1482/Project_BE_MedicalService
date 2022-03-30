@@ -22,6 +22,14 @@ class CreateAllTable extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('ethnics', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name', 255);
+            $table->integer('is_active');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('provinces', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
@@ -51,7 +59,7 @@ class CreateAllTable extends Migration
 
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
         });
-        
+
         Schema::create('diseases', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 255);
@@ -77,7 +85,6 @@ class CreateAllTable extends Migration
             $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
-
         });
 
         Schema::create('vaccine_disease', function (Blueprint $table) {
@@ -95,6 +102,20 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('vaccine_id');
             $table->unsignedBigInteger('producer_id');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('vaccine_id')->references('id')->on('vaccines')->onDelete('cascade');
+            $table->foreign('producer_id')->references('id')->on('producers')->onDelete('cascade');
+        });
+
+        Schema::create('packs', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name', 255);
+            $table->date('expired');
+            $table->unsignedBigInteger('vaccine_id');
+            $table->unsignedBigInteger('producer_id');
+            $table->integer('is_active');
             $table->timestamps();
             $table->softDeletes();
 
@@ -206,6 +227,7 @@ class CreateAllTable extends Migration
             $table->softDeletes();
 
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
 
         Schema::create('residents', function (Blueprint $table) {
@@ -215,8 +237,10 @@ class CreateAllTable extends Migration
             $table->string('phone', 255);
             $table->integer('gender');
             $table->string('identity_card', 255);
+            $table->string('email', 255)->nullable();
             $table->string('health_insurance_card', 255)->nullable();
             $table->unsignedBigInteger('nationality_id');
+            $table->unsignedBigInteger('ethnic_id');
             $table->unsignedBigInteger('ward_id');
             $table->string('address', 255);
             $table->string('job', 255)->nullable();
@@ -224,11 +248,11 @@ class CreateAllTable extends Migration
             $table->text('description')->nullable();
             $table->integer('is_active');
 
-            $table->unsignedBigInteger('role_id');
             $table->timestamps();
             $table->softDeletes();
             
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('cascade');
+            $table->foreign('ethnic_id')->references('id')->on('ethnics')->onDelete('cascade');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
         });
 
@@ -273,15 +297,26 @@ class CreateAllTable extends Migration
             $table->bigIncrements('id');
             $table->date('start_at');
             $table->date('end_at');
+            $table->unsignedBigInteger('disease_id');
             $table->unsignedBigInteger('ward_id');
             $table->string('address', 255);
-            $table->integer('quantity');
-            $table->integer('actual_quantity');
             $table->integer('status_id');
 
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
+            $table->foreign('disease_id')->references('id')->on('wards')->onDelete('cascade');
+        });
+
+        Schema::create('session_vaccine', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('vaccine_id');
+            $table->unsignedBigInteger('session_id');
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('vaccine_id')->references('id')->on('vaccines')->onDelete('cascade');
+            $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
         });
 
         Schema::create('objects', function (Blueprint $table) {
@@ -300,21 +335,26 @@ class CreateAllTable extends Migration
 
         Schema::create('injections', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('vaccine_id');
+            $table->unsignedBigInteger('pack_id');
             $table->unsignedBigInteger('resident_id');
-            $table->unsignedBigInteger('object_id');
+            $table->unsignedBigInteger('object_id')->nullable();
             $table->unsignedBigInteger('priority_id');
             $table->integer('type');
             $table->integer('dose');
+            $table->integer('reaction_id');
+            $table->unsignedBigInteger('injector_id')->nullable();
+            $table->unsignedBigInteger('watcher_id')->nullable();
             $table->text('description')->nullable();
             
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('vaccine_id')->references('id')->on('vaccines')->onDelete('cascade');
+            $table->foreign('pack_id')->references('id')->on('packs')->onDelete('cascade');
             $table->foreign('resident_id')->references('id')->on('residents')->onDelete('cascade');
             $table->foreign('object_id')->references('id')->on('objects')->onDelete('cascade');
             $table->foreign('priority_id')->references('id')->on('priorities')->onDelete('cascade');
+            $table->foreign('injector_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('watcher_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         // Schema::create('epidemics', function (Blueprint $table) {
@@ -334,8 +374,6 @@ class CreateAllTable extends Migration
         //     $table->foreign('disease_id')->references('id')->on('diseases')->onDelete('cascade');
             
         // });
-
-        
         
     }
 

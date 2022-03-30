@@ -140,7 +140,7 @@
                             <tr>
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Tên</th>
-                                <th class="text-center">Email</th>
+                                <th class="text-center">SDT</th>
                                 <th class="text-center">Xã/phường quản lý</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
@@ -151,16 +151,20 @@
                             <tr data-id={{ $resident->id }}>
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $resident->name }}</td>
-                                <td class="">{{ $resident->email }}</td>
-                                <td class="">{{ $resident->belongsToRole->belongsToWard->name }}</td>
+                                <td class="">{{ $resident->phone }}</td>
+                                <td class="">{{ $resident->belongsToWard->name }}</td>
                                 <td class="text-center">
-                                    <span class="label label-{{ ($resident->status_id == 1) ? 'success' : 'danger' }}">{{ ($resident->status_id == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
+                                    <span class="label label-{{ ($resident->is_active == 1) ? 'success' : 'danger' }}">{{ ($resident->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$resident->id}}">
+                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$resident->id}}">
                                         <i class="fa-solid fa-eye"></i>
-                                    </button>
+                                    </button> --}}
+
+                                    <a href="{{ route('admin.resident.listInjections', ['id'=> $resident->id]) }}" class="btn btn-primary" title="Chi tiết">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
 
                                     <a href="{{ route('admin.resident.edit', ['id'=> $resident->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>

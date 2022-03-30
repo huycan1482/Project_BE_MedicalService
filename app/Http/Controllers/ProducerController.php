@@ -141,4 +141,11 @@ class ProducerController extends ProducerRepository
     {
         //
     }
+
+    public function getActiveProducersByVaccineId ($vaccine_id) {
+        return response()->json([
+            'status' => true,
+            'data' => $this->getActiveProducers($vaccine_id),
+        ]);
+    }
 }

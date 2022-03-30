@@ -39,6 +39,9 @@
                         <a href="{{ route('admin.nationality.index') }}"><i class="fa fa-solid fa-globe"></i> Quản lý quốc tịch</a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.ethnic.index') }}"><i class="fa fa-solid fa-people-group"></i> Quản lý dân tộc</a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.province.index') }}"><i class="fa fa-solid fa-map"></i> Quản lý Tỉnh/Thành phố</a>
                     </li>
                     <li>
@@ -68,20 +71,17 @@
                         <a href="{{ route('admin.vaccine.index') }}"><i class="fa fa-solid fa-vial"></i> Quản lý loại vaccine</a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.pack.index') }}"><i class="fa fa-solid fa-box-archive"></i></i> Quản lý lô vaccine</a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.priority.index') }}"><i class="fa fa-solid fa-barcode"></i> Quản lí mã đối tượng ưu tiên</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
-            </li>
-            <li>
-                <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
-            </li>
-            <li>
                 <a href="{{ route('admin.resident.index') }}"><i class="fa fa-solid fa-users"></i> <span>Quản lí dân cư</span></a>
             </li>
-            <li class="treeview">
+            {{-- <li class="treeview">
                 <a href="#">
                     <i class="fa fa-solid fa-syringe"></i><span>Quản lí tiêm chủng</span>
                     <span class="pull-right-container">
@@ -93,6 +93,15 @@
                         <a href="{{ route('admin.session.index') }}"><i class="fa fa-solid fa-list-check"></i> Quản lý buổi tiêm</a>
                     </li>
                 </ul>
+            </li> --}}
+            <li>
+                <a href="{{ route('admin.session.index') }}"><i class="fa fa-solid fa-list-check"></i> Quản lý buổi tiêm</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
+            </li>
+            <li>
+                <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
             </li>
         </ul>
     </section>

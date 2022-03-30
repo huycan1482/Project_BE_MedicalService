@@ -20,9 +20,14 @@ Route::post('/postLogin', 'Auth\LoginController@postLogin')->name('postLogin');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin'], function () {
+// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('nationality', 'NationalityController'); 
     Route::get('nationality/forceDelete/{id}', 'NationalityController@forceDelete')->name('province.forceDelete');
     Route::get('nationality/restore/{id}', 'NationalityController@restore')->name('province.restore');
+
+    Route::resource('ethnic', 'EthnicController'); 
+    Route::get('ethnic/forceDelete/{id}', 'EthnicController@forceDelete')->name('ethnic.forceDelete');
+    Route::get('ethnic/restore/{id}', 'EthnicController@restore')->name('ethnic.restore');
 
     Route::resource('province', 'ProvinceController'); 
     Route::get('province/forceDelete/{id}', 'ProvinceController@forceDelete')->name('province.forceDelete');
@@ -42,6 +47,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('disease/forceDelete/{id}', 'DiseaseController@forceDelete')->name('disease.forceDelete');
     Route::get('disease/restore/{id}', 'DiseaseController@restore')->name('disease.restore');
 
+    Route::get('producer/getActiveProducersByVaccineId/{id}', 'ProducerController@getActiveProducersByVaccineId')->name('producer.getActiveProducersByVaccineId');
     Route::resource('producer', 'ProducerController'); 
     Route::get('producer/forceDelete/{id}', 'ProducerController@forceDelete')->name('producer.forceDelete');
     Route::get('producer/restore/{id}', 'ProducerController@restore')->name('producer.restore');
@@ -49,6 +55,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::resource('vaccine', 'VaccineController'); 
     Route::get('vaccine/forceDelete/{id}', 'VaccineController@forceDelete')->name('vaccine.forceDelete');
     Route::get('vaccine/restore/{id}', 'VaccineController@restore')->name('vaccine.restore');
+
+    Route::get('pack/getActivePacksByVaccineId/{id}', 'PackController@getActivePacksByVaccineId')->name('pack.getActivePacksByVaccineId');
+    Route::resource('pack', 'PackController'); 
+    Route::get('pack/forceDelete/{id}', 'PackController@forceDelete')->name('pack.forceDelete');
+    Route::get('pack/restore/{id}', 'PackController@restore')->name('pack.restore');
 
     Route::resource('priority', 'PriorityController'); 
     Route::get('priority/forceDelete/{id}', 'PriorityController@forceDelete')->name('priority.forceDelete');
@@ -63,13 +74,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('user/forceDelete/{id}', 'UserController@forceDelete')->name('user.forceDelete');
     Route::get('user/restore/{id}', 'UserController@restore')->name('user.restore');
 
+    Route::get('resident/listInjections/{id}', 'ResidentController@getListInjections')->name('resident.listInjections');
     Route::resource('resident', 'ResidentController'); 
     Route::get('resident/forceDelete/{id}', 'ResidentController@forceDelete')->name('resident.forceDelete');
     Route::get('resident/restore/{id}', 'ResidentController@restore')->name('resident.restore');
+    Route::get('searchResidents', 'ResidentController@searchResidents')->name('resident.search');
 
     Route::resource('session', 'SessionController'); 
     Route::get('session/forceDelete/{id}', 'SessionController@forceDelete')->name('session.forceDelete');
     Route::get('session/restore/{id}', 'SessionController@restore')->name('session.restore');
+
+    Route::resource('object', 'InjectionObjectController'); 
+    Route::get('object/forceDelete/{id}', 'InjectionObjectController@forceDelete')->name('object.forceDelete');
+    Route::get('object/restore/{id}', 'InjectionObjectController@restore')->name('object.restore');
+    Route::get('object/listObjects/{id}', 'InjectionObjectController@getListObjects')->name('object.listObjects');
+
+    Route::resource('injection', 'InjectionController'); 
+    Route::get('injection/forceDelete/{id}', 'InjectionController@forceDelete')->name('injection.forceDelete');
+    Route::get('injection/restore/{id}', 'InjectionController@restore')->name('injection.restore');
 
     // ImportController
     // ImportProvince

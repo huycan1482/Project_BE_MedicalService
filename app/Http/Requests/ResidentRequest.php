@@ -68,7 +68,7 @@ class ResidentRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->resident,$this->route('resident'), request()->route('id'));
+        // dd($this->resident,$this->route('resident'), request()->route('id'));
         // dd($this->all(), $this);
         if ($this->resident) {
             return [
@@ -76,10 +76,13 @@ class ResidentRequest extends FormRequest
                 'date_of_birth' => 'required|date_format:"Y-m-d"',
                 'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
                 'nationality_id' => 'required|exists:nationalities,id',
-                'identity_card' => 'required|string:255|max:12',
-                function ($attribute, $value, $fail) {
-                    dd($attribute, $value, $fail);
-                },
+                'email' => 'nullable|email',
+                'identity_card' => 'required|unique:residents,identity_card,'.$this->resident,
+                'ethnic_id' => 'required|exists:ethnics,id',
+                // 'identity_card' => 'required|string:255|max:12',
+                // function ($attribute, $value, $fail) {
+                //     dd($attribute, $value, $fail);
+                // },
                 'health_insurance_card' => 'nullable|string:255|max:12|unique:residents,health_insurance_card,'.$this->resident,
                 'job' => 'nullable|string:255',
                 'work_place' => 'nullable|string:255',
@@ -88,29 +91,27 @@ class ResidentRequest extends FormRequest
                 'ward_id' => 'required|exists:wards,id',
                 'address' => 'required|string:255',
                 'description' => 'nullable|string',
-                'is_active' => 'required|integer|min:0|max:1'
+                'is_active' => 'integer|min:0|max:1'
             ];
         }
 
         return [
-            // 'name' => 'required|string:255',
-            // 'date_of_birth' => 'required|date_format:"Y-m-d"',
-            // 'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-            // 'nationality_id' => 'required|exists:nationalities,id',
-            'identity_card' => 
-                function ($attribute, $value, $fail) {
-                    // dd($attribute, $value, $fail);
-                    $fail('tạch');
-                },
-            // 'health_insurance_card' => 'nullable|string:255|max:12|unique:residents,health_insurance_card',
-            // 'job' => 'nullable|string:255',
-            // 'work_place' => 'nullable|string:255',
-            // 'address' => 'required|string:255',
-            // 'gender' => 'required|integer|min:0|max:1',
-            // 'ward_id' => 'required|exists:wards,id',
-            // 'address' => 'required|string:255',
-            // 'description' => 'nullable|string',
-            // 'is_active' => 'required|integer|min:0|max:1'
+            'name' => 'required|string:255',
+            'date_of_birth' => 'required|date_format:"Y-m-d"',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'nationality_id' => 'required|exists:nationalities,id',
+            'identity_card' => 'required|unique:residents,identity_card',
+            'email' => 'nullable|email',
+            'ethnic_id' => 'required|exists:ethnics,id',
+            'health_insurance_card' => 'nullable|string:255|max:12|unique:residents,health_insurance_card',
+            'job' => 'nullable|string:255',
+            'work_place' => 'nullable|string:255',
+            'address' => 'required|string:255',
+            'gender' => 'required|integer|min:0|max:1',
+            'ward_id' => 'required|exists:wards,id',
+            'address' => 'required|string:255',
+            'description' => 'nullable|string',
+            'is_active' => 'required|integer|min:0|max:1'
         ];
     }
 
@@ -130,6 +131,9 @@ class ResidentRequest extends FormRequest
             'identity_card.string' => 'Dữ liệu không đúng định dạng',
             'identity_card.unique' => 'Dữ liệu trùng',
             'identity_card.max' => 'CCCD/Mã định danh có độ dài từ 12 số trở xuống',
+            'email.email' => 'Dữ liệu không đúng định dạng',
+            'ethnic_id.required' => 'Yêu cầu không để trống',
+            'ethnic_id.exists' => 'Dữ liệu không tồn tại',
             'health_insurance_card.unique' => 'Dữ liệu trùng',
             'health_insurance_card.string' => 'Dữ liệu không đúng định dạng',
             'health_insurance_card.unique' => 'Dữ liệu trùng',

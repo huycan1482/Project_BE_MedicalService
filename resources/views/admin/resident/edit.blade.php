@@ -10,7 +10,7 @@
     <h1>
         Sửa - Người dùng
         <small>
-            <a href="{{ route('admin.user.index') }}"><span class="label label-success">Danh sách</span></a>
+            <a href="{{ route('admin.resident.index') }}"><span class="label label-success">Danh sách</span></a>
         </small>
     </h1>
 </section>
@@ -52,13 +52,13 @@
                                     <input id="date_of_birth" name="date_of_birth" type="date" class="form-control" placeholder="Ngày tháng năm sinh" value="{{ $resident->date_of_birth }}">
                                 </div>
                             </div>
-                            <div class="form-group d-flex col-lg-4" id="form-phone">
+                            <div class="form-group d-flex col-lg-3" id="form-phone">
                                 <label class="" for="phone">Số điện thoại <span class="required-dot">**</span></label>
                                 <div>
                                     <input id="phone" name="phone" type="text" class="form-control" placeholder="Số điện thoại" value="{{ $resident->phone }}">
                                 </div>
                             </div>
-                            <div class="form-group col-lg-4" id="form-nationality_id">
+                            <div class="form-group col-lg-3" id="form-nationality_id">
                                 <label>Quốc gia</label><span class="required-dot">**</span>
                                 <div>
                                     <select class="select2 form-control" style="width: 100%;" name="nationality_id" id="nationality_id">
@@ -69,10 +69,27 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group d-flex col-lg-4" id="form-identity_card">
+                            <div class="form-group d-flex col-lg-3" id="form-identity_card">
                                 <label class="" for="identity_card">CCCD/Mã định danh/Hộ chiếu <span class="required-dot">**</span></label>
                                 <div>
                                     <input id="identity_card" name="identity_card" type="text" class="form-control" placeholder="CCCD/Mã định danh/Hộ chiếu" value=" {{ $resident->identity_card }}">
+                                </div>
+                            </div>
+                            <div class="form-group d-flex col-lg-3" id="form-ethnic_id">
+                                <label class="" for="ethnic_id">Dân tộc<span class="required-dot">**</span></label>
+                                <div>
+                                    <select class="select2 form-control" style="width: 100%;" name="ethnic_id" id="ethnic_id">
+                                        <option value="">-- Chọn --</option>
+                                        @foreach ($ethnics as $ethnic)
+                                        <option value="{{ $ethnic->id }}" {{ $resident->ethnic_id == $ethnic->id ? 'selected' : '' }}>{{ $ethnic->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex col-lg-4" id="form-email">
+                                <label class="" for="email">Email</label>
+                                <div>
+                                    <input id="email" name="email" type="text" class="form-control" placeholder="Email" value="{{ $resident->email }}">
                                 </div>
                             </div>
                             <div class="form-group d-flex col-lg-4" id="form-health_insurance_card">
@@ -87,7 +104,7 @@
                                     <input id="job" name="job" type="text" class="form-control" placeholder="Nghề nghiệp" value="{{ $resident->job }}">
                                 </div>
                             </div>
-                            <div class="form-group d-flex col-lg-4" id="form-work_place">
+                            <div class="form-group d-flex col-lg-12" id="form-work_place">
                                 <label class="" for="work_place">Địa chỉ làm việc </label>
                                 <div>
                                     <input id="work_place" name="work_place" type="text" class="form-control" placeholder="Địa chỉ làm việc" value="{{ $resident->work_place }}">
@@ -143,9 +160,9 @@
                                     <textarea id="description" name="description" class="form-group">{{ $resident->description }}</textarea>
                                 </div>
                             </div>
-                            <div class="checkbox form-group col-lg-12" id="form-status_id">         
+                            <div class="checkbox form-group col-lg-12" id="form-is_active">         
                                 <label>
-                                    <input type="checkbox" name="status_id" value="1" {{$resident->status_id == 1 ? 'checked' : '' }}>Trạng thái kích hoạt
+                                    <input type="checkbox" name="is_active" value="1" {{$resident->is_active == 1 ? 'checked' : '' }}>Trạng thái kích hoạt
                                 </label>
                             </div>
                         </div>

@@ -74,8 +74,8 @@ class SessionRequest extends FormRequest
             'start_at' => 'required|date_format:"Y-m-d"',
             'end_at' => 'required|after:start_at|date_format:"Y-m-d"',
             'address' => 'required|string:255',
-            'quantity' => 'required|integer',
-            'actual_quantity' => 'required|integer|lte:quantity',
+            // 'quantity' => 'required|integer',
+            // 'actual_quantity' => 'required|integer|lte:quantity',
             'status_id' => 'required|integer|min:0|max:2'
         ];
     }
@@ -91,11 +91,11 @@ class SessionRequest extends FormRequest
             'address.required' => 'Yêu cầu không để trống',
             'address.string' => 'Dữ liệu không đúng định dạng',
             'abbreviation.unique' => 'Dữ liệu trùng',
-            'quantity.required' => 'Yêu cầu không để trống',
-            'quantity.integer' => 'Dữ liệu ko đúng định dạng',
-            'actual_quantity.required' => 'Yêu cầu không để trống',
-            'actual_quantity.integer' => 'Dữ liệu ko đúng định dạng',
-            'actual_quantity.lte' => 'Số lượng thực tế phải ít hơn hoặc bằng số lượng dự kiến',
+            // 'quantity.required' => 'Yêu cầu không để trống',
+            // 'quantity.integer' => 'Dữ liệu ko đúng định dạng',
+            // 'actual_quantity.required' => 'Yêu cầu không để trống',
+            // 'actual_quantity.integer' => 'Dữ liệu ko đúng định dạng',
+            // 'actual_quantity.lte' => 'Số lượng thực tế phải ít hơn hoặc bằng số lượng dự kiến',
             'status_id.required' => 'Yêu cầu không để trống',
             'status_id.integer' => 'Dữ liệu ko đúng định dạng',
             'status_id.min' => 'Dữ liệu ko đúng định dạng',

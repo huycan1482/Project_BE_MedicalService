@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Producer;
+use App\Vaccine;
+
 class ProducerRepository extends EloquentRepository
 {
      /**
@@ -40,5 +43,10 @@ class ProducerRepository extends EloquentRepository
         }
 
         return $query->paginate(10);
+    }
+
+    public function getActiveProducers ($vaccine_id) {
+        $vaccine = Vaccine::find($vaccine_id);
+        return $vaccine->belongsToManyActiveProducers;
     }
 }

@@ -43,7 +43,6 @@
                                     <option value="2">Trạm trưởng</option>
                                     <option value="3">Nhân viên trạm y tế</option>
                                     <option value="4">Nhân viên ủy ban phường</option>
-                                    <option value="5">Công dân sinh sống trong khu vực</option>
                                 </select>
                             </div>
                         </div>

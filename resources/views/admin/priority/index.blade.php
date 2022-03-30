@@ -100,7 +100,7 @@
                             @foreach ($priorities as $key => $priority)
                             <tr data-id={{ $priority->id }}>
                                 <td class="text-center">{{ $key + 1 }}</td>
-                                <td class="text-center">{{ $priority->name }}</td>
+                                <td class="text-center">{!! str_limit($priority->name, 30) !!}</td>
                                 <td class="">{!! str_limit($priority->description, 30) !!}</td>
                                 <td class="text-center">
                                     <span class="label label-{{ ($priority->is_active == 1) ? 'success' : 'danger' }}">{{ ($priority->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>

@@ -10,12 +10,14 @@ $(document).ready(function(){
         var phone = $('#phone').val();
         var nationality_id = $('#nationality_id').val();
         var identity_card = $('#identity_card').val();
+        var ethnic_id = $('#ethnic_id').val();
         var health_insurance_card = $('#health_insurance_card').val();
+        var email = $('#email').val();
         var job = $('#job').val();
         var work_place = $('#work_place').val();
         var address = $('#address').val();
         var description = CKEDITOR.instances.description.getData();
-        var status_id = ( $("input[name='status_id']").is(':checked') ) ? 1 : 0;
+        var is_active = ( $("input[name='is_active']").is(':checked') ) ? 1 : 0;
         var ward_id = $('#ward_id').val();
 
         var data = {
@@ -25,12 +27,14 @@ $(document).ready(function(){
             'phone': phone,
             'nationality_id': nationality_id,
             'identity_card': identity_card,
+            'ethnic_id': ethnic_id,
+            'email': email,
             'health_insurance_card': health_insurance_card,
             'job': job,
             'work_place': work_place,
             'address': address,
             'description': description,
-            'status_id': status_id,
+            'is_active': is_active,
             'ward_id': ward_id,
         };
 
@@ -44,13 +48,15 @@ $(document).ready(function(){
         var date_of_birth = $("#date_of_birth").val();
         var phone = $('#phone').val();
         var nationality_id = $('#nationality_id').val();
+        var email = $('#email').val();
         var identity_card = $('#identity_card').val();
+        var ethnic_id = $('#ethnic_id').val();
         var health_insurance_card = $('#health_insurance_card').val();
         var job = $('#job').val();
         var work_place = $('#work_place').val();
         var address = $('#address').val();
         var description = CKEDITOR.instances.description.getData();
-        var status_id = ( $("input[name='status_id']").is(':checked') ) ? 1 : 0;
+        var is_active = ( $("input[name='is_active']").is(':checked') ) ? 1 : 0;
         var ward_id = $('#ward_id').val();
 
         var data = {
@@ -60,14 +66,17 @@ $(document).ready(function(){
             'phone': phone,
             'nationality_id': nationality_id,
             'identity_card': identity_card,
+            'ethnic_id': ethnic_id,
+            'email': email,
             'health_insurance_card': health_insurance_card,
             'job': job,
             'work_place': work_place,
             'address': address,
             'description': description,
-            'status_id': status_id,
+            'is_active': is_active,
             'ward_id': ward_id,
         };
+        
         updateModel(url, data);
     });
 

@@ -116,6 +116,8 @@
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Thời gian bắt đầu</th>
                                 <th class="text-center">Thời gian kết thúc</th>
+                                <th class="text-center">Loại dịch bệnh</th>
+                                <th class="text-center">Loại vaccine</th>
                                 <th class="text-center">Số lượng</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
@@ -127,22 +129,28 @@
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="text-center">{{ $session->start_at }}</td>
                                 <td class="text-center">{{ $session->end_at }}</td>
-                                <td class="text-center">{{ $session->quantity }}/{{ $session->actual_quantity }}</td>
+                                <td class="text-center">{{ $session->belongsToDisease->name }}</td>
+                                <td class="text-center">
+                                    @foreach ($session->belongsToManyVaccines as $item)
+                                        {{$item->name.','}}
+                                    @endforeach
+                                </td>
+                                <td class="text-center">{{ $session->hasManyObject->count() }}</td>
                                 <td class="text-center">
                                   
                                 @if ($session->status_id == 0)
                                     <span class="label label-{{ 'warning' }}">{{'Hoãn'}}</span>
                                 @elseif ($session->status_id == 1)
-                                    <span class="label label-{{ 'danger' }}">{{'Hủy'}}</span>
+                                    <span class="label label-{{ 'danger' }}">{{'Chưa hoàn thành'}}</span>
                                 @else 
                                     <span class="label label-{{ 'success' }}">{{'Hoàn thành'}}</span>
                                 @endif
                                     
                                 </td>
-                                <td class="text-center">
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$session->id}}">
+                                <td class="text-center" >
+                                    <a href="{{ route('admin.object.listObjects', ['id' => $session->id]) }}" class="btn btn-primary btn-detail" title="Chi tiết"> 
                                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                    </button>
+                                    </a>
                                     <a href="{{ route('admin.session.edit', ['id'=> $session->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
                                     </a>

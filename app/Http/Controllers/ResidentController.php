@@ -6,6 +6,7 @@ use App\Http\Requests\ResidentRequest;
 use App\Repositories\ResidentRepository;
 use App\Resident;
 use App\User;
+use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,6 +65,7 @@ class ResidentController extends ResidentRepository
                 'provinces' => $this->getActiveProvinces(),
                 'districts' => $this->getActiveDistricts(0),
                 'wards' => $this->getActiveWards(0),
+                'ethnics' => $this->getActiveEthnics(),
             ]);
         } else {
             return redirect()->route('admin.errors.4xx');
@@ -103,6 +105,56 @@ class ResidentController extends ResidentRepository
         //
     }
 
+    public function getListInjections ($id) {
+        $resident = Resident::find($id);
+        if (!empty($resident))
+            return view ('admin.resident.injection', [
+                'resident' => $resident,
+                'diseases' => $this->getActiveDiseases(),
+                'list_injections' => $this->getListInjection($id, request()->query('disease')),
+                'disease_id' => empty(request()->query('disease')) ? '' : request()->query('disease'),
+            ]);
+    }
+
+    public function searchResidents ()
+    {
+        $query = Resident::select('residents.id', 'residents.name', 'residents.date_of_birth', 'residents.phone', 'residents.address');
+
+        if (!empty(request()->query('identity_card')))
+            $query->where('identity_card', request()->query('identity_card'));
+
+        if (!empty(request()->query('name')))
+            $query->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
+
+        if (!empty(request()->query('date_of_birth')))
+            $query->where('residents.date_of_birth', request()->query('date_of_birth'));
+
+        if (!empty(request()->query('phone')))
+            $query->where('residents.phone', request()->query('phone'));
+
+        if (!empty(request()->query('ward_id'))) {
+            $query->where('residents.ward_id',  request()->query('ward_id'));
+        } else if (!empty(request()->query('district_id'))) {
+            $wards = $this->getActiveWards(request()->query('district_id'));
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
+        } else if (!empty(request()->query('province_id'))) {
+            $wards = Ward::select('wards.*')->join('districts', 'districts.id', '=', 'wards.district_id')->join('provinces', 'provinces.id', '=', 'districts.province_id')->where([['provinces.id', '=', request()->query('province')], ['wards.is_active', '=', 1], ['districts.is_active', '=', 1], ['provinces.is_active', '=', 1]])->get();
+
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
+        }
+
+        $data = $query->paginate(2);
+        
+        // dd($data->perPage());
+        return response()->json([
+            'total' => $data->total(),
+            'per_page' => $data->perPage(),
+            'current_page' => $data->currentPage(),
+            'last_page' => $data->lastPage(),
+            'data' => $data->items(),
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -126,6 +178,7 @@ class ResidentController extends ResidentRepository
                 'provinces' => $this->getActiveProvinces(),
                 'districts' => $this->getActiveDistricts(0),
                 'wards' => $this->getActiveWards(0),
+                'ethnics' => $this->getActiveEthnics(),
             ]);
         }
     }
@@ -139,7 +192,12 @@ class ResidentController extends ResidentRepository
      */
     public function update(ResidentRequest $request, $id)
     {
-        //
+        // dd($request->all());
+        if ($this->updateResident($id, $request->all())) {
+            return response()->json(['mess' => 'Sửa bản ghi thành công', 200]);
+        } else {
+            return response()->json(['mess' => 'Sửa bản ghi lỗi'], 502);
+        }
     }
 
     /**
