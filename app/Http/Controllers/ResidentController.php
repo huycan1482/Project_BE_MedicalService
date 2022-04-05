@@ -29,7 +29,6 @@ class ResidentController extends ResidentRepository
                 $residents = $this->getPaginate10($check_admin ? 0 : $current_user->belongsToRole->ward_id);
             else
                 $residents = $this->getFilter10($check_admin ? 0 : $current_user->belongsToRole->ward_id); 
-            
             return view ('admin.resident.index', [
                 'residents' => $residents,
                 'provinces' => $this->getActiveProvinces(),
@@ -46,8 +45,24 @@ class ResidentController extends ResidentRepository
             ]);
         } else {
             return redirect()->route('admin.errors.4xx');
+        } 
+    }
+
+    public function getDataWithTrashed () {
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $residents = $this->getResidentsWithTrashed();
+
+            return view('admin.resident.trash', [
+                'residents' => $residents,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
         }
-        
     }
 
     /**
@@ -108,7 +123,7 @@ class ResidentController extends ResidentRepository
     public function getListInjections ($id) {
         $resident = Resident::find($id);
         if (!empty($resident))
-            return view ('admin.resident.injection', [
+            return view ('admin.injection.index', [
                 'resident' => $resident,
                 'diseases' => $this->getActiveDiseases(),
                 'list_injections' => $this->getListInjection($id, request()->query('disease')),
@@ -208,6 +223,48 @@ class ResidentController extends ResidentRepository
      */
     public function destroy($id)
     {
-        //
+        $currentUser = User::find(Auth::user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+            if ($this->deleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->forceDeleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function restore($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->restoreModel($id)) {
+                return response()->json(['mess' => 'Khôi phục bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Khôi phục bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
     }
 }

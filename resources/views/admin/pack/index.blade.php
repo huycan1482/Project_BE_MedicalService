@@ -22,7 +22,12 @@
                 <i class="fa-solid fa-plus"></i>
                 <span style="margin-left: 5px">Thêm mới</span>
             </a>
-
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.pack.trash') }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -80,7 +85,7 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách<span class="label label-info" style="margin-left: 8px">{{ $packs->total() }} kết quả</span></h3>
@@ -100,7 +105,7 @@
                         </thead>
                         <tbody>
                             @foreach ($packs as $key => $pack)
-                            <tr data-id={{ $pack->id }}>
+                            <tr class="item-{{ $pack->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $pack->name }}</td>
                                 <td class="">{{ $pack->expired }}</td>
@@ -110,9 +115,9 @@
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$pack->id}}">
+                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$pack->id}}">
                                         <i class="fa-solid fa-eye"></i>
-                                    </button>
+                                    </button> --}}
 
                                     <a href="{{ route('admin.pack.edit', ['id'=> $pack->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
@@ -133,30 +138,6 @@
                     {!! $packs->links() !!}
                 </div>
                 <!-- /.box -->
-            </div>
-        </div>
-
-        <div class="col-lg-5">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Tên lô</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

@@ -314,9 +314,12 @@
 
     <script src="/AdminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
-    <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-
     <script src="https://kit.fontawesome.com/fb15251dc0.js" crossorigin="anonymous"></script>
+
+    {{-- <script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script> --}}
+    {{-- link ckeditor die --}}
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.18.0/ckeditor.js"></script>
 
     @yield('js')
 </body>

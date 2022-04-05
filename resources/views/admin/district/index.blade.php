@@ -55,6 +55,12 @@
                 <i class="fa-solid fa-file-excel"></i> 
                 <span style="margin-left: 5px">Nhập file Excel</span>
             </button>
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.district.trash') }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -112,7 +118,7 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách<span class="label label-primary" style="margin-left: 8px">{{ $districts->total() }} kết quả</span></h3>
@@ -131,7 +137,7 @@
                         </thead>
                         <tbody>
                             @foreach ($districts as $key => $district)
-                            <tr data-id={{ $district->id }}>
+                            <tr class="item-{{ $district->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $district->name }}</td>
                                 <td class="">{{ $district->belongsToProvince->name }}</td>
@@ -140,9 +146,9 @@
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$district->id}}">
+                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$district->id}}">
                                         <i class="fa-solid fa-eye"></i>
-                                    </button>
+                                    </button> --}}
 
                                     <a href="{{ route('admin.district.edit', ['id'=> $district->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
@@ -163,30 +169,6 @@
                     {!! $districts->links() !!}
                 </div>
                 <!-- /.box -->
-            </div>
-        </div>
-
-        <div class="col-lg-5">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Tên Quận/Huyện</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

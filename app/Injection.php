@@ -14,7 +14,7 @@ class Injection extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'pack_id', 'resident_id', 'object_id', 'priority_id', 'type', 'dose', 'reaction_id', 'injector_id', 'watcher_id', 'description'
+        'pack_id', 'resident_id', 'object_id', 'priority_id', 'type', 'dose', 'reaction_id', 'injector_id', 'watcher_id', 'description', 'created_at', 'updated_at'
     ];
 
     public function belongsToResident () {
@@ -22,7 +22,7 @@ class Injection extends Model
     }
 
     public function belongsToObject () {
-        return $this->belongsTo('App\Object', 'object_id', 'id');
+        return $this->belongsTo('App\InjectionObject', 'object_id', 'id');
     }
 
     public function belongsToPriority () {
@@ -35,5 +35,9 @@ class Injection extends Model
 
     public function belongsToWatcher () {
         return $this->belongsTo('App\User', 'watcher_id', 'id');
+    }
+
+    public function belongsToPack () {
+        return $this->belongsTo('App\Pack', 'pack_id', 'id');
     }
 }

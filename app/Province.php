@@ -15,15 +15,33 @@ class Province extends Model
         'id', 'name', 'code', 'is_active'
     ];
 
+    protected static $relations_to_districts = ['hasManyDistricts'];
+
     protected static function boot() {
         parent::boot();
     
-        static::deleting(function($province) {
-            $province->hasManyDistricts()->delete();
+        // static::deleting(function($province) {
+        //     $province->hasManyDistricts()->delete();
+        // });
+
+        // static::restoring(function($province) {
+        //     $province->hasManyDistricts()->withTrashed()->restore();
+        // });
+
+        static::deleting(function($resource) {
+            foreach (static::$relations_to_districts as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
         });
 
-        static::restoring(function($province) {
-            $province->hasManyDistricts()->withTrashed()->restore();
+        static::restoring(function($resource) {
+            foreach (static::$relations_to_districts as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
         });
     }
 

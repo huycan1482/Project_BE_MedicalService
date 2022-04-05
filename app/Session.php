@@ -13,6 +13,51 @@ class Session extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected static $relations_to_session_vaccine = ['hasManySessionVaccine'];
+    protected static $relations_to_objects = ['hasManyObjects'];
+
+    protected static function boot() {
+        parent::boot();
+    
+        // static::deleting(function($role) {
+        //     $role->hasManySessionVaccine()->delete();
+        //     $role->hasManyObjects()->delete();
+        // });
+
+        // static::restoring(function($role) {
+        //     $role->hasManySessionVaccine()->withTrashed()->restore();
+        //     $role->hasManyObjects()->withTrashed()->restore();
+        // });
+
+        static::deleting(function($resource) {
+            foreach (static::$relations_to_session_vaccine as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+
+            foreach (static::$relations_to_objects as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+        });
+
+        static::restoring(function($resource) {
+            foreach (static::$relations_to_session_vaccine as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+
+            foreach (static::$relations_to_objects as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'start_at', 'end_at', 'disease_id', 'address', 'ward_id', 'status_id'
     ];
@@ -23,6 +68,10 @@ class Session extends Model
 
     public function hasManySessionVaccine () {
         return $this->hasMany('App\SessionVaccine', 'session_id', 'id');
+    }
+
+    public function hasManyObjects () {
+        return $this->hasMany('App\InjectionObject', 'session_id', 'id');
     }
 
     public function belongsToManyVaccines () {
@@ -38,4 +87,8 @@ class Session extends Model
     public function hasManyObject () {
         return $this->hasMany('App\InjectionObject', 'session_id', 'id');
     }
+
+    
+
+    
 }

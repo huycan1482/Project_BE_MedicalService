@@ -158,7 +158,49 @@ class RoleController extends RoleRepository
      */
     public function destroy($id)
     {
-        //
+        $currentUser = User::find(Auth::user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+            if ($this->deleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->forceDeleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function restore($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->restoreModel($id)) {
+                return response()->json(['mess' => 'Khôi phục bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Khôi phục bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
     }
 
     public function getRoleByWardId ($id) {

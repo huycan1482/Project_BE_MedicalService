@@ -17,13 +17,95 @@ class Vaccine extends Model
         'name', 'description', 'is_active'
     ];
 
+    protected static $relations_to_vaccine_disease = ['hasManyVaccineDisease'];
+    protected static $relations_to_vaccine_producer = ['hasManyVaccineProducer'];
+    protected static $relations_to_session_vaccine = ['hasManySessionVaccine'];
+    protected static $relations_to_packs = ['hasManyPacks'];
 
-    public function hasManyVaccineDisease (){
+    protected static function boot() {
+        parent::boot();
+    
+        // static::deleting(function($vaccine) {
+        //     $vaccine->hasManyVaccineDisease()->delete();
+        //     $vaccine->hasManyVaccineProducer()->delete();
+        //     $vaccine->hasManySessionVaccine()->delete();
+        //     $vaccine->hasManyPacks()->delete();
+        // });
+
+        // static::restoring(function($vaccine) {
+        //     $vaccine->hasManyVaccineDisease()->withTrashed()->restore();
+        //     $vaccine->hasManyVaccineProducer()->withTrashed()->restore();
+        //     $vaccine->hasManySessionVaccine()->withTrashed()->restore();
+        //     $vaccine->hasManyPacks()->withTrashed()->restore();
+        // });
+
+        static::deleting(function($resource) {
+            foreach (static::$relations_to_vaccine_disease as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+
+            foreach (static::$relations_to_vaccine_producer as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+
+            foreach (static::$relations_to_session_vaccine as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+
+            foreach (static::$relations_to_packs as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+        });
+
+        static::restoring(function($resource) {
+            foreach (static::$relations_to_vaccine_disease as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+
+            foreach (static::$relations_to_vaccine_producer as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+
+            foreach (static::$relations_to_session_vaccine as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+
+            foreach (static::$relations_to_packs as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+        });
+    }
+
+    public function hasManyVaccineDisease () {
         return $this->hasMany('App\VaccineDisease', 'vaccine_id', 'id');
     }
 
     public function hasManyVaccineProducer () {
         return $this->hasMany('App\VaccineProducer', 'vaccine_id', 'id');
+    }
+
+    public function hasManySessionVaccine (){
+        return $this->hasMany('App\SessionVaccine', 'vaccine_id', 'id');
+    }
+
+    public function hasManyPacks () {
+        return $this->hasMany('App\Pack', 'vaccine_id', 'id');
     }
 
     public function belongsToManyDiseases () {

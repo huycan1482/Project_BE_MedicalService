@@ -21,6 +21,28 @@ class VaccineRepository extends EloquentRepository
         return \App\Vaccine::class;
     }
 
+    public function getVaccinesWithTrashed () {
+        $query = $this->_model::onlyTrashed()->latest();
+
+        if (!empty(request()->query('name'))) {
+            $query = $this->_model::where([['name', 'like', '%' . request()->query('name') . '%']]);
+        }
+
+        if (request()->query('status') == 'hien-thi') {
+            $query->where('is_active', 1);
+        } else if (request()->query('status') == 'an') {
+            $query->where('is_active', 0);
+        }
+        
+        if (request()->query('sort') == 'moi-nhat') {
+            $query->orderBy('id', 'asc');
+        } else if (request()->query('sort') == 'cu-nhat') {
+            $query->orderBy('id', 'desc');
+        }
+
+        return $query->paginate(10);
+    }
+
     public function getPaginate10()
     {
         // return $this->_model->latest()->paginate(10);
@@ -176,4 +198,12 @@ class VaccineRepository extends EloquentRepository
 
         return true;
     }
+
+    public function getActiveVaccine ($disease_id) {
+        return Vaccine::select('vaccines.*')
+        ->join('vaccine_disease', 'vaccine_disease.vaccine_id', '=', 'vaccines.id')
+        ->where([['vaccine_disease.disease_id', '=', $disease_id], ['vaccines.is_active', '=', 1]])
+        ->get();
+    }
 }
+

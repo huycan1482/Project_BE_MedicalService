@@ -2,10 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Disease;
 use App\Injection;
 use App\InjectionObject;
+use App\Pack;
+use App\Priority;
 use App\User;
 use App\Vaccine;
+use App\VaccineDisease;
 
 class InjectionRepository extends EloquentRepository
 {
@@ -48,6 +52,8 @@ class InjectionRepository extends EloquentRepository
     }
 
     public function createInjection ($arr_data) {
+        $this->countInjection($arr_data['resident_id'], 1);
+        dd();
         $injection = new Injection();
         $injection->pack_id = $arr_data['pack_id'];
         $injection->resident_id = $arr_data['resident_id'];
@@ -59,16 +65,34 @@ class InjectionRepository extends EloquentRepository
         $injection->injector_id = $arr_data['injector_id'];
         $injection->watcher_id = $arr_data['watcher_id'];
         $injection->description = $arr_data['description'];
+        $injection->created_at = $arr_data['created_at'];
 
-        $object = InjectionObject::find($arr_data['object_id']);
-        
-        if ($injection->save()) {
-            $object->status_id = 1;
-            $object->save();
-            return true;
+        if (!empty($arr_data['object_id'])) {
+            $object = InjectionObject::find($arr_data['object_id']);
+
+            if ($injection->save()) {
+                $object->status_id = 1;
+                $object->save();
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            if ($injection->save()) {
+                return true;
+            } else {
+                return false;
+            }
         }
+    }
+
+    public function countInjection ($resident_id, $disease_id) {
+        return VaccineDisease::select()
+        ->join('vaccines', 'vaccines.id', '=', 'vaccine_disease.vaccine_id')
+        ->join('packs', 'packs.vaccine_id', '=', 'vaccines.id')
+        ->join('injections', 'injections.pack_id', '=', 'packs.id')
+        ->where([['vaccine_disease.disease_id', '=', $disease_id], ['injections.resident_id', '=', $resident_id]])
+        ->get()->count();
     }
 
     public function getActiveVaccines () {
@@ -83,6 +107,20 @@ class InjectionRepository extends EloquentRepository
             $users->where('roles.ward_id', $ward_id);
         }
 
+        $users->where([['level', '>', 1]]);
+
         return $users->get();
+    }
+
+    public function getActivePacks () {
+        return Pack::where('is_active', 1)->get();
+    }
+
+    public function getActivePriorities () {
+        return Priority::where('is_active', 1)->get();
+    }
+
+    public function getActiveDiseases () {
+        return Disease::where('is_active', 1)->get();
     }
 }

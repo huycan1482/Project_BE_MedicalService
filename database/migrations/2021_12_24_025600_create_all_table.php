@@ -305,7 +305,7 @@ class CreateAllTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
-            $table->foreign('disease_id')->references('id')->on('wards')->onDelete('cascade');
+            $table->foreign('disease_id')->references('id')->on('diseases')->onDelete('cascade');
         });
 
         Schema::create('session_vaccine', function (Blueprint $table) {

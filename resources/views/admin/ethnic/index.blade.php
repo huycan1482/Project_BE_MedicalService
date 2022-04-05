@@ -51,6 +51,12 @@
                 <i class="fa-solid fa-file-excel"></i> 
                 <span style="margin-left: 5px">Nhập file Excel</span>
             </button> --}}
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.ethnic.trash') }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -108,7 +114,7 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách<span class="label label-info" style="margin-left: 8px">{{ $ethnics->total() }} kết quả</span></h3>
@@ -126,7 +132,7 @@
                         </thead>
                         <tbody>
                             @foreach ($ethnics as $key => $ethnic)
-                            <tr data-id={{ $ethnic->id }}>
+                            <tr class="item-{{ $ethnic->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $ethnic->name }}</td>
                                 <td class="text-center">
@@ -134,9 +140,9 @@
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$ethnic->id}}">
+                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$ethnic->id}}">
                                         <i class="fa-solid fa-eye"></i>
-                                    </button>
+                                    </button> --}}
 
                                     <a href="{{ route('admin.ethnic.edit', ['id'=> $ethnic->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
@@ -160,29 +166,6 @@
             </div>
         </div>
 
-        <div class="col-lg-5">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Tên dân tộc</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- /.row -->
 </section>

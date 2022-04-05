@@ -11,53 +11,16 @@
 
 @section('content')
 <section class="content-header">
-    <h1> Quản lý danh sách Quốc tịch </h1>
+    <h1> Quản lý danh sách Quốc tịch đã xóa </h1>
 </section>
 
 <section class="content">
-    {{-- modal nhập file excel --}}
-    <div class="modal fade" id="modal-excel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Nhập dữ liệu qua file Excel</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="custom-import">
-                        <form action="{{ route('admin.import.nationality') }}" method="POST" name="" enctype="multipart/form-data">
-                            @csrf
-                            <label for="">Chọn file Excel</label><br>
-                            <input name="import_file" type="file" class="custom-type-file" id="import-file"><br><br>
-                            <button class="label-type-file btn btn-primary">Nhập file excel</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
-                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
-            <a class="btn bg-purple" href="{{ route('admin.nationality.create') }}">
-                <i class="fa-solid fa-plus"></i>
-                <span style="margin-left: 5px">Thêm mới</span>
+            <a class="btn btn-primary" href="{{ route('admin.nationality.index') }}">
+                <i class="fa fa-solid fa-list"></i>
+                <span style="margin-left: 5px">Danh sách</span>
             </a>
-            <button class="btn btn-success" data-toggle="modal" data-target="#modal-excel">
-                <i class="fa-solid fa-file-excel"></i> 
-                <span style="margin-left: 5px">Nhập file Excel</span>
-            </button>
-            @can('viewAny', App\User::class)
-            <a class="btn btn-primary" href="{{ route('admin.nationality.trash') }}">
-                <i class="fa fa-trash"></i>
-                <span style="margin-left: 5px">Danh sách đã xóa</span>
-            </a>
-            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -103,31 +66,6 @@
                                 </div>
                             </form>
                         </div>
-                        {{-- <div class="col-lg-5">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li>
-                                    <a><h4>Tổng số lượng sản phẩm: <span class="badge bg-light-blue" style="margin-bottom: 3px"></span></h4></a>
-                                </li>
-                                <li>
-                                    <a> Số lượng hàng khả dụng: <span class="badge bg-green" style="margin-bottom: 3px">  </span> 
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 50%"></div>
-                                    </div></a>
-                                </li>
-                                <li>
-                                    <a> Số lượng hàng quá hạn: <span class="badge bg-yellow" style="margin-bottom: 3px"> </span> 
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-yellow" style="width: 50%"></div>
-                                    </div></a>
-                                </li>
-                                <li>
-                                    <a> Số lượng hàng bán hết: <span class="badge bg-red" style="margin-bottom: 3px"></span> 
-                                    <div class="progress progress-xs progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" style="width: "></div>
-                                    </div></a>
-                                </li>
-                            </ul>
-                        </div> --}}
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -167,18 +105,13 @@
                                     <span class="label label-{{ ($nationality->is_active == 1) ? 'success' : 'danger' }}">{{ ($nationality->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
                                 </td>
                                 <td class="text-center">
-                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$nationality->id}}">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button> --}}
-
-                                    <a href="{{ route('admin.nationality.edit', ['id'=> $nationality->id]) }}" class="btn btn-warning" title="Sửa">
-                                        <i class="fa-solid fa-pencil"></i>
+                                    <a href="javascript:void(0)" onclick="restore('nationality/restore', '{{ $nationality->id }}' )" class="btn btn-primary" title="Khôi phục">
+                                        <i class="fas fa-trash-restore"></i>
                                     </a>
 
-                                    <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('nationality', '{{ $nationality->id }}' )" title="Xóa">
-                                        <i class="fa fa-trash"></i>
+                                    <a href="javascript:void(0)" onclick = "forceDelete('nationality/forceDelete', '{{ $nationality->id }}' )" class="btn btn-danger" title="Xóa">
+                                        <i class="fas fa-ban"></i>
                                     </a>
-
                                 </td>
                             </tr>
                             @endforeach
@@ -192,6 +125,7 @@
                 <!-- /.box -->
             </div>
         </div>
+
     </div>
     <!-- /.row -->
 </section>

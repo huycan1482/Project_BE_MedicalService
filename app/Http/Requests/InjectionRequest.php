@@ -67,10 +67,25 @@ class InjectionRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->route('injection')) {
+            return [
+                'pack_id' => 'required|exists:packs,id',
+                // 'resident_id' => 'required|exists:residents,id',
+                // 'object_id' => 'required|exists:objects,id',
+                'priority_id' => 'required|exists:priorities,id',
+                'type' => 'nullable|integer|min:0|max:1',
+                'dose' => 'required|integer|min:1|max:3',
+                'reaction_id' => 'required|integer|min:0|max:1',
+                'watcher_id' => 'required|exists:users,id',
+                'injector_id' => 'required|exists:users,id',
+                'description' => 'nullable|string',
+            ];
+        }
+
         return [
             'pack_id' => 'required|exists:packs,id',
             'resident_id' => 'required|exists:residents,id',
-            'object_id' => 'required|exists:objects,id',
+            'object_id' => 'nullable|exists:objects,id',
             'priority_id' => 'required|exists:priorities,id',
             'type' => 'nullable|integer|min:0|max:1',
             'dose' => 'required|integer|min:1|max:3',

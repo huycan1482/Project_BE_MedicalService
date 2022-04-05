@@ -18,6 +18,10 @@
 
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
+            <a class="btn btn-info" href="{{ route('admin.injection.create', ['resident_id' => $resident->id]) }}">
+                <i class="fa-solid fa-plus"></i>
+                <span style="margin-left: 5px">Thêm nhanh</span>
+            </a>
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -89,7 +93,7 @@
                                 <td>{{ $item->vaccine_name }}</td>
                                 <td>{{ $item->pack_name }}</td>
                                 <td class="text-center">{{ $item->dose }}</td>
-                                <td>{{ $item->created_at }}</td>
+                                <td>{{ date_format(date_create($item->created_at), 'd/m/Y') }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.injection.edit', ['id'=> $item->injection_id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>

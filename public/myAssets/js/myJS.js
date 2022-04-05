@@ -19,13 +19,13 @@ function destroyModel(model, id) {
             dataType: "json", // kiểu dữ liệu trả về
             success: function (response) { // success : kết quả trả về sau khi gửi request ajax
                 $('.item-'+id).closest('tr').remove();// class .item- ở trong class của thẻ td đã khai báo trong file index
-                messageFade('success', response.mess, 'Tải lại sau 1,5s');
-                setTimeout(function (){
-                    location.reload()
-                }, 2500);
+                messageFade('success', response.mess, '');
+                // setTimeout(function (){
+                //     location.reload()
+                // }, 2500);
             },
             error: function (e) { // lỗi nếu có
-                messageFade('danger', e.responseJSON.mess, 'Tải lại sau 1,5s');
+                messageFade('danger', e.responseJSON.mess, '');
             }
         });
     }
@@ -61,23 +61,46 @@ function updateModel (url, data) {
     });
 }
 
-function destroyModel (url, data) {
-    var result = confirm("Bạn có chắc chắn muốn xóa ?");
+
+function restore (model, id) {
+    var result = confirm("Bạn có chắc chắn muốn khôi phục bản ghi ?");
     if (result) { 
         $.ajax({
-            type: 'DELETE',
-            url:base_url + '/admin/' + url + '/' + data,
-            data: data,
-            dataType : "json",
-            success: function (response) {
+            url: base_url + '/admin/'+model+'/'+id,
+            type: 'GET',
+            data: {}, 
+            dataType: "json", 
+            success: function (response) { 
                 $('.item-'+id).closest('tr').remove();
-                messageFade('success', response.mess, 'Tải lại sau 1,5s');
-                setTimeout(function (){
-                    location.reload()
-                }, 2500);
-            }, 
-            error: function (e) {
-                messageFade('danger', e.responseJSON.mess, 'Tải lại sau 1,5s');
+                messageFade('success', response.mess, '');
+                // setTimeout(function (){
+                //     location.reload()
+                // }, 1500);
+            },
+            error: function (e) { 
+                messageFade('danger', e.responseJSON.mess, '');
+            }
+        });
+    }
+}
+
+function forceDelete (model, id) {
+    var result = confirm("Bạn có chắc chắn muốn vĩnh viễn bản ghi và dữ liệu liên quan ?");
+    if (result) { 
+        $.ajax({
+            url: base_url + '/admin/'+model+'/'+id,
+            type: 'GET',
+            data: {}, 
+            dataType: "json", 
+            success: function (response) { 
+                $('.item-'+id).closest('tr').remove();
+                messageFade('success', response.mess, '');
+                // setTimeout(function (){
+                //     location.reload()
+                // }, 1500);
+            },
+            error: function (e) { 
+                messageFade('danger', e.responseJSON.mess, '');
             }
         });
     }

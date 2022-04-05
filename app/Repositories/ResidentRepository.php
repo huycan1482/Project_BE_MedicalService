@@ -24,12 +24,15 @@ class ResidentRepository extends EloquentRepository
         return \App\Resident::class;
     }
 
+    public function getResidentsWithTrashed () {
+        
+    }
+
     public function getPaginate10($cur_ward_id)
     {
         if ($cur_ward_id != 0) {
             return $this->_model->select('residents.*')
-            ->join('roles', 'roles.id', '=', 'residents.role_id')
-            ->where('roles.ward_id', $cur_ward_id)
+            ->where('residents.ward_id', $cur_ward_id)
             ->orderBy('id', 'asc')->paginate(10);
         } else {
             return $this->_model->orderBy('id', 'asc')->paginate(10);
@@ -39,57 +42,46 @@ class ResidentRepository extends EloquentRepository
 
     public function getFilter10($cur_ward_id)
     {
-        $query = $this->_model::select('residents.*')->latest('users.created_at');
+        $query = $this->_model::select('residents.*')->latest('residents.created_at');
 
         if ($cur_ward_id != 0) {
-            $query->join('roles', 'roles.id', '=', 'residents.role_id')->where('roles.ward_id', $cur_ward_id);
+            $query->where('residents.ward_id', $cur_ward_id);
         }
         // Lấy dữ liệu công dân trong phạm vi quản lý
 
         if (!empty(request()->query('name'))) {
-            $query->where([['users.name', 'like', '%' . request()->query('name') . '%']]);
+            $query->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
         }
 
         if (!empty(request()->query('email'))) {
-            $query->where([['users.email', 'like', '%' . request()->query('email') . '%']]);
+            $query->where([['residents.email', 'like', '%' . request()->query('email') . '%']]);
         }
 
-        // Lọc theo cấp độ
-        if (request()->query('level') == 'Admin') {
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->where('roles.level', 1);
-        } else if (request()->query('level') == 'Tram-truong') {
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->where('roles.level', 2);
-        } else if (request()->query('level') == 'Nhan-vien-tram-y-te') {
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->where('roles.level', 3);
-        } else if (request()->query('level') == 'Nhan-vien-uy-ban-phuong') {
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->where('roles.level', 4);
-        } 
-
-        // Lọc theo địa bàn quản lý quyền
+        // Lọc theo địa bàn quản lý
         if (!empty(request()->query('ward'))) {
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->where('roles.ward_id', request()->query('ward'));
+            $query->where('residents.ward_id', request()->query('ward'));
 
         } else if (!empty(request()->query('district'))) {
             $wards = $this->getActiveWards(request()->query('district'));
             // lấy các xã/phường có district_id là đầu vào và is_active = 1
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->whereIn('roles.ward_id', $this->getArrWardId($wards));
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
         } else if (!empty(request()->query('province'))) {
             $wards = Ward::select('wards.*')->join('districts', 'districts.id', '=', 'wards.district_id')->join('provinces', 'provinces.id', '=', 'districts.province_id')->where([['provinces.id', '=', request()->query('province')], ['wards.is_active', '=', 1], ['districts.is_active', '=', 1], ['provinces.is_active', '=', 1]])->get();
 
             // lấy các xã/phường có province_id là đầu vào và is_active = 1
-            $query->join('roles', 'roles.id', '=', 'users.role_id')->whereIn('roles.ward_id', $this->getArrWardId($wards));
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
         }
 
         if (request()->query('status') == 'hien-thi') {
-            $query->where('users.is_active', 1);
+            $query->where('residents.is_active', 1);
         } else if (request()->query('status') == 'an') {
-            $query->where('users.is_active', 0);
+            $query->where('residents.is_active', 0);
         }
         
         if (request()->query('sort') == 'moi-nhat') {
-            $query->orderBy('users.id', 'asc');
+            $query->orderBy('residents.id', 'asc');
         } else if (request()->query('sort') == 'cu-nhat') {
-            $query->orderBy('users.id', 'desc');
+            $query->orderBy('residents.id', 'desc');
         } 
 
         return $query->paginate(10);

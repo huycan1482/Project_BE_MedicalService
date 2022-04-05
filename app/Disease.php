@@ -11,6 +11,51 @@ class Disease extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected static $relations_to_vaccine_disease = ['hasManyVaccineDisease'];
+    protected static $relations_to_sessions = ['hasManySessions'];
+
+    protected static function boot() {
+        parent::boot();
+    
+        // static::deleting(function($disease) {
+        //     $disease->hasManyVaccineDisease()->delete();
+        //     $disease->hasManySessions()->delete();
+        // });
+
+        // static::restoring(function($disease) {
+        //     $disease->hasManyVaccineDisease()->withTrashed()->restore();
+        //     $disease->hasManySessions()->withTrashed()->restore();
+        // });
+
+        static::deleting(function($resource) {
+            foreach (static::$relations_to_sessions as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+
+            foreach (static::$relations_to_vaccine_disease as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->delete();
+                }
+            }
+        });
+
+        static::restoring(function($resource) {
+            foreach (static::$relations_to_sessions as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+
+            foreach (static::$relations_to_vaccine_disease as $relation) {
+                foreach ($resource->{$relation}()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'name', 'description', 'is_active'
     ];
@@ -18,6 +63,11 @@ class Disease extends Model
     public function hasManyVaccineDisease ()
     {
         return $this->hasMany('App\VaccineDisease', 'vaccine_id', 'id');
+    }
+
+    public function hasManySessions()
+    {
+        return $this->hasMany('App\Session', 'disease_id', 'id');
     }
 
     public function belongsToManyActiveVaccines () {
