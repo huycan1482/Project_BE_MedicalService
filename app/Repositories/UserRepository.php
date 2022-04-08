@@ -21,7 +21,7 @@ class UserRepository extends EloquentRepository
     }
 
     public function getUsersWithTrashed () {
-        $query = $this->_model::latest('users.created_at');
+        $query = $this->_model::select('users.*')->onlyTrashed();
 
         if (!empty(request()->query('name'))) {
             $query->where([['users.name', 'like', '%' . request()->query('name') . '%']]);
@@ -72,15 +72,30 @@ class UserRepository extends EloquentRepository
         return $query->paginate(10);
     }
 
-    public function getPaginate10()
+    public function getPaginate10($ward_id)
     {
         // return $this->_model->latest()->paginate(10);
+
+        if ($ward_id != 0) {
+            return $this->_model->select('users.*')->join('roles', 'roles.id', '=', 'users.role_id')
+            ->where([['roles.ward_id', '=', $ward_id], ['roles.level', '>', 1]])->orderBy('users.id', 'asc')->paginate(10);
+        }
+
         return $this->_model->orderBy('id', 'asc')->paginate(10);
     }
 
-    public function getFilter10()
+    public function getFilter10($ward_id)
     {
-        $query = $this->_model::latest('users.created_at');
+        $query = $this->_model::select('users.*');
+
+        if ($ward_id != 0) {
+            if (empty(request()->query('level'))) {
+                $query->join('roles', 'roles.id', '=', 'users.role_id')
+                ->where([['roles.ward_id', '=', $ward_id], ['roles.level', '>', 1]]);
+            } else {
+                $query->where([['roles.ward_id', '=', $ward_id]]);
+            }
+        }
 
         if (!empty(request()->query('name'))) {
             $query->where([['users.name', 'like', '%' . request()->query('name') . '%']]);
@@ -153,7 +168,7 @@ class UserRepository extends EloquentRepository
 
     public function getActiveRoles ($ward_id) {
         if ($ward_id != 0) {
-            return Role::where([['is_active', '=', 1], ['ward_id', '=', $ward_id]])->get();
+            return Role::where([['is_active', '=', 1], ['ward_id', '=', $ward_id], ['level', '>', 1]])->get();
         } else {
             return Role::where('is_active', 1)->get();
         }

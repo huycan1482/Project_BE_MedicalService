@@ -51,6 +51,10 @@ class InjectionObject extends Model
         return $this->belongsTo('App\Resident', 'resident_id', 'id');
     }
 
+    public function belongsToResidentTrashed () {
+        return $this->belongsTo('App\Resident', 'resident_id', 'id')->withTrashed();
+    }
+
     public function belongsToSession () {
         return $this->belongsTo('App\Session', 'session_id', 'id');
     }

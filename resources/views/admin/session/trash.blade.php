@@ -11,22 +11,16 @@
 
 @section('content')
 <section class="content-header">
-    <h1> Quản lý danh sách Buổi tiêm </h1>
+    <h1> Quản lý danh sách Buổi tiêm đã xóa </h1>
 </section>
 
 <section class="content">
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
-            <a class="btn bg-purple" href="{{ route('admin.session.create') }}">
-                <i class="fa-solid fa-plus"></i>
-                <span style="margin-left: 5px">Thêm mới</span>
+            <a class="btn btn-primary" href="{{ route('admin.session.index') }}">
+                <i class="fa fa-solid fa-list"></i>
+                <span style="margin-left: 5px">Danh sách</span>
             </a>
-            @can('viewAny', App\User::class)
-            <a class="btn btn-primary" href="{{ route('admin.session.trash') }}">
-                <i class="fa fa-trash"></i>
-                <span style="margin-left: 5px">Danh sách đã xóa</span>
-            </a>
-            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -117,14 +111,14 @@
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="text-center">{{ $session->start_at }}</td>
                                 <td class="text-center">{{ $session->end_at }}</td>
-                                <td class="text-center">{{ $session->belongsToDisease->name }}</td>
+                                <td class="text-center">{{ $session->belongsToDiseaseWithTrashed->name }}</td>
                                 <td class="text-center">
                                     @foreach ($session->belongsToManyVaccines as $item)
                                         {{$item->name.','}}
                                     @endforeach
                                 </td>
                                 <td class="text-center">{{ $session->hasManyObject->count() }}</td>
-                                <td class="text-center">{{ $session->belongsToWard->name }}</td>
+                                <td class="text-center">{{ $session->belongsToWardWithTrashed->name }}</td>
                                 <td class="text-center">
                                   
                                 @if ($session->status_id == 0)
@@ -137,17 +131,13 @@
                                     
                                 </td>
                                 <td class="text-center" >
-                                    <a href="{{ route('admin.object.listObjects', ['id' => $session->id]) }}" class="btn btn-primary btn-detail" title="Chi tiết"> 
-                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    <a href="javascript:void(0)" onclick="restore('session/restore', '{{ $session->id }}' )" class="btn btn-primary" title="Khôi phục">
+                                        <i class="fas fa-trash-restore"></i>
                                     </a>
-                                    <a href="{{ route('admin.session.edit', ['id'=> $session->id]) }}" class="btn btn-warning" title="Sửa">
-                                        <i class="fa-solid fa-pencil"></i>
+
+                                    <a href="javascript:void(0)" onclick = "forceDelete('session/forceDelete', '{{ $session->id }}' )" class="btn btn-danger" title="Xóa">
+                                        <i class="fas fa-ban"></i>
                                     </a>
-                                    @can('viewAny', App\User::class)
-                                    <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('session', '{{ $session->id }}' )" title="Xóa">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

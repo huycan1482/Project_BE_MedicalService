@@ -37,8 +37,9 @@ class ResidentController extends ResidentRepository
                 'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
                 'status' => empty(request()->query('status')) ? '' : request()->query('status'),
                 'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+                'phone' => empty(request()->query('phone')) ? '' : request()->query('phone'),
                 'email' => empty(request()->query('email')) ? '' : request()->query('email'),
-                'level' => empty(request()->query('level')) ? '' : request()->query('level'),
+                'identity' => empty(request()->query('identity')) ? '' : request()->query('identity'),
                 'province' => empty(request()->query('province')) ? '' : request()->query('province'),
                 'district' => empty(request()->query('district')) ? '' : request()->query('district'),
                 'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
@@ -56,9 +57,18 @@ class ResidentController extends ResidentRepository
 
             return view('admin.resident.trash', [
                 'residents' => $residents,
+                'provinces' => $this->getActiveProvinces(),
+                'districts' => $this->getActiveDistricts(empty(request()->query('province')) ? 0 : request()->query('province')),
+                'wards' => $this->getActiveWards(empty(request()->query('district')) ? 0 : request()->query('district')),
                 'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
                 'status' => empty(request()->query('status')) ? '' : request()->query('status'),
                 'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+                'phone' => empty(request()->query('phone')) ? '' : request()->query('phone'),
+                'email' => empty(request()->query('email')) ? '' : request()->query('email'),
+                'identity' => empty(request()->query('identity')) ? '' : request()->query('identity'),
+                'province' => empty(request()->query('province')) ? '' : request()->query('province'),
+                'district' => empty(request()->query('district')) ? '' : request()->query('district'),
+                'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
             ]);
         } else {
             return redirect()->route('admin.errors.4xx');

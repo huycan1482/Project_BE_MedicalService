@@ -3,9 +3,12 @@
 namespace App\Repositories;
 
 use App\Disease;
+use App\District;
+use App\Province;
 use App\Session;
 use App\SessionVaccine;
 use App\Vaccine;
+use App\Ward;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -20,24 +23,65 @@ class SessionRepository extends EloquentRepository
         return \App\Session::class;
     }
 
-    public function getPaginate10()
-    {
-        // return $this->_model->latest()->paginate(10);
-        return $this->_model->orderBy('id', 'asc')->paginate(10);
+    public function getSessionWithTrashed() {
+        $query = $this->_model::onlyTrashed()->latest();
+
+        if (!empty(request()->query('start_at'))) {
+            $query->where([['start_at', '>=', request()->query('start_at')]]);
+        } 
+
+        if (!empty(request()->query('end_at'))) {
+            $query->where([['end_at', '<=', request()->query('end_at')]]);
+        } 
+
+        if (request()->query('status') == 'hoan-thanh') {
+            $query->where('status_id', 2);
+        } else if (request()->query('status') == 'chua-hoan-thanh') {
+            $query->where('status_id', 1);
+        } else if (request()->query('status') == 'hoan') {
+            $query->where('status_id', 0);
+        }
+        
+        if (request()->query('sort') == 'moi-nhat') {
+            $query->orderBy('id', 'asc');
+        } else if (request()->query('sort') == 'cu-nhat') {
+            $query->orderBy('id', 'desc');
+        }
+
+        return $query->paginate(10);
     }
 
-    public function getFilter10()
+    public function getPaginate10($ward_id)
+    {
+        // return $this->_model->latest()->paginate(10);
+        if ($ward_id == 0) {
+            return $this->_model->orderBy('id', 'asc')->paginate(10);
+        } 
+        return $this->_model->where('ward_id', $ward_id)->orderBy('id', 'asc')->paginate(10);
+    }
+
+    public function getFilter10($ward_id)
     {
         $query = $this->_model::latest();
 
-        if (!empty(request()->query('name'))) {
-            $query = $this->_model::where([['name', 'like', '%' . request()->query('name') . '%']]);
+        if ($ward_id != 0) {
+            $query->where('ward_id', $ward_id);
         }
 
-        if (request()->query('status') == 'hien-thi') {
-            $query->where('is_active', 1);
-        } else if (request()->query('status') == 'an') {
-            $query->where('is_active', 0);
+        if (!empty(request()->query('start_at'))) {
+            $query->where([['start_at', '>=', request()->query('start_at')]]);
+        } 
+
+        if (!empty(request()->query('end_at'))) {
+            $query->where([['end_at', '<=', request()->query('end_at')]]);
+        } 
+
+        if (request()->query('status') == 'hoan-thanh') {
+            $query->where('status_id', 2);
+        } else if (request()->query('status') == 'chua-hoan-thanh') {
+            $query->where('status_id', 1);
+        } else if (request()->query('status') == 'hoan') {
+            $query->where('status_id', 0);
         }
         
         if (request()->query('sort') == 'moi-nhat') {
@@ -138,5 +182,17 @@ class SessionRepository extends EloquentRepository
         }
 
         return true;
+    }
+
+    public function getActiveProvinces () {
+        return Province::where('is_active', 1)->get();
+    }
+
+    public function getActiveDistricts () {
+        return District::where('is_active', 1)->get();
+    }
+
+    public function getActiveWards () {
+        return Ward::where('is_active', 1)->get();
     }
 }

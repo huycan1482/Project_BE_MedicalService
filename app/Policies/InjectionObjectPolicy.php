@@ -63,9 +63,9 @@ class InjectionObjectPolicy
      * @param  \App\InjectionObject  $injectionObject
      * @return mixed
      */
-    public function delete(User $user, InjectionObject $injectionObject)
+    public function delete(User $user)
     {
-        //
+        return $user->belongsToRole->level <= 3 ? true : false;
     }
 
     /**

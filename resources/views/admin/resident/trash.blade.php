@@ -11,23 +11,17 @@
 
 @section('content')
 <section class="content-header">
-    <h1> Quản lý danh sách Dân cư </h1>
+    <h1> Quản lý danh sách Dân cư đã xóa</h1>
 </section>
 
 <section class="content">
 
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
-            <a class="btn bg-purple" href="{{ route('admin.resident.create') }}">
-                <i class="fa-solid fa-plus"></i>
-                <span style="margin-left: 5px">Thêm mới</span>
+            <a class="btn btn-primary" href="{{ route('admin.resident.index') }}">
+                <i class="fa fa-solid fa-list"></i>
+                <span style="margin-left: 5px">Danh sách</span>
             </a>
-            @can('viewAny', App\User::class)
-            <a class="btn btn-primary" href="{{ route('admin.resident.trash') }}">
-                <i class="fa fa-trash"></i>
-                <span style="margin-left: 5px">Danh sách đã xóa</span>
-            </a>
-            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -166,25 +160,13 @@
                                     <span class="label label-{{ ($resident->is_active == 1) ? 'success' : 'danger' }}">{{ ($resident->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
                                 </td>
                                 <td class="text-center">
-
-                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$resident->id}}">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button> --}}
-
-                                    <a href="{{ route('admin.resident.listInjections', ['id'=> $resident->id]) }}" class="btn btn-primary" title="Chi tiết">
-                                        <i class="fa-solid fa-vial-circle-check"></i>
+                                    <a href="javascript:void(0)" onclick="restore('resident/restore', '{{ $resident->id }}' )" class="btn btn-primary" title="Khôi phục">
+                                        <i class="fas fa-trash-restore"></i>
                                     </a>
 
-                                    <a href="{{ route('admin.resident.edit', ['id'=> $resident->id]) }}" class="btn btn-warning" title="Sửa">
-                                        <i class="fa-solid fa-pencil"></i>
+                                    <a href="javascript:void(0)" onclick = "forceDelete('resident/forceDelete', '{{ $resident->id }}' )" class="btn btn-danger" title="Xóa">
+                                        <i class="fas fa-ban"></i>
                                     </a>
-
-                                    @can('viewAny', App\User::class)
-                                    <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('resident', '{{ $resident->id }}' )" title="Xóa">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                    @endcan
-
                                 </td>
                             </tr>
                             @endforeach

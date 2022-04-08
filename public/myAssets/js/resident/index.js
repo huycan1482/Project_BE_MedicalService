@@ -4,19 +4,21 @@ $(document).ready(function(){
 
     $(document).on('click', '.btn-filter', function(e) {
         var name = $('#name').val();
+        var phone = $('#phone').val();
         var email = $('#email').val();
+        var identity = $('#identity').val();
         var sort = $('#sort').val();
         var status = $('#status').val();
-        var level = $('#level').val();
         var province = $('#province').val();
         var district = $('#district').val();
         var ward = $('#ward').val();
 
         name === "" ? urlParams.delete('name') : urlParams.set('name', name);
+        phone === "" ? urlParams.delete('phone') : urlParams.set('phone', phone);
         email === "" ? urlParams.delete('email') : urlParams.set('email', email);
+        identity === "" ? urlParams.delete('identity') : urlParams.set('identity', identity);
         sort === "" ? urlParams.delete('sort') : urlParams.set('sort', sort);
         status === "" ? urlParams.delete('status') : urlParams.set('status', status);
-        level === "" ? urlParams.delete('level') : urlParams.set('level', level);
         province === "" ? urlParams.delete('province') : urlParams.set('province', province);
         district === "" ? urlParams.delete('district') : urlParams.set('district', district);
         ward === "" ? urlParams.delete('ward') : urlParams.set('ward', ward);

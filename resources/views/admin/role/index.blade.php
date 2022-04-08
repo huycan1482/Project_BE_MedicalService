@@ -25,7 +25,12 @@
                 <i class="fa-solid fa-plus"></i>
                 <span style="margin-left: 5px">Thêm mới</span>
             </a>
-
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.role.trash') }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -128,7 +133,7 @@
             </div>
         </div>
 
-        <div class="col-lg-7">
+        <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách<span class="label label-primary" style="margin-left: 8px">{{ $roles->total() }} kết quả</span></h3>
@@ -147,7 +152,7 @@
                         </thead>
                         <tbody>
                             @foreach ($roles as $key => $role)
-                            <tr data-id={{ $role->id }}>
+                            <tr class="item-{{ $role->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $role->name }}</td>
                                 <td class="">
@@ -169,10 +174,6 @@
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$role->id}}">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-
                                     <a href="{{ route('admin.role.edit', ['id'=> $role->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
                                     </a>
@@ -192,30 +193,6 @@
                     {!! $roles->links() !!}
                 </div>
                 <!-- /.box -->
-            </div>
-        </div>
-
-        <div class="col-lg-5">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Tên quyền</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

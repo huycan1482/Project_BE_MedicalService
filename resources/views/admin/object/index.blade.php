@@ -308,6 +308,12 @@
                 <i class="fa-solid fa-file-excel"></i> 
                 <span style="margin-left: 5px">Nhập file Excel</span>
             </button>
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.object.trash', ['id' => $session_id]) }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -328,27 +334,32 @@
                     <div class="row">
                         <form action="" class="col-lg-12">
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <label class="" for="name">Tìm kiếm theo tên</label>
-                                    <input type="text" class="form-control" id="name" placeholder="Tìm kiếm theo tên" value="{{ $name }}">
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="Tìm kiếm theo tên" value="{{ $name }}">
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <label class="" for="identity">Tìm kiếm CCCD/CMT</label>
+                                    <input type="text" class="form-control" name="identity" id="identity" placeholder="Tìm kiếm theo tên" value="{{ $identity }}">
+                                </div>
+                                <div class="col-lg-3">
                                     <i class="fa-solid fa-arrow-down-short-wide"></i>
                                     <label class="" for="sort">Sắp xếp</label>
                                     <select name="" id="sort" class="form-control">
                                         <option value="">--Chọn--</option>
-                                        <option value="moi-nhat" {{ !empty($sort) == 'moi-nhat' ? 'selected' : ''}}>Ngày thêm mới nhất</option>
-                                        <option value="cu-nhat" {{ !empty($sort) == 'cu-nhat' ? 'selected' : ''}}>Ngày thêm cũ nhất</option>
+                                        <option value="moi-nhat" {{ ($sort) == 'moi-nhat' ? 'selected' : ''}}>Ngày thêm mới nhất</option>
+                                        <option value="cu-nhat" {{ ($sort) == 'cu-nhat' ? 'selected' : ''}}>Ngày thêm cũ nhất</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     <i class="fa-regular fa-eye"></i>
                                     <label class="" for="status">Trạng thái</label>
                                     <select name="" id="status" class="form-control">
                                         <option value="">--Chọn--</option>
-                                        <option value="hien-thi" {{ !empty($status) == 'hien-thi' ? 'selected' : ''}}>Hiển thị</option>
-                                        <option value="an" {{ !empty($status) == 'an' ? 'selected' : ''}}>Ẩn</option>
+                                        <option value="da-tiem" {{ ($status == 'da-tiem') ? 'selected' : ''}}>Đã tiêm</option>
+                                        <option value="chua-tiem" {{ ($status == 'chua-tiem') ? 'selected' : ''}}>Chưa tiêm</option>
                                     </select>
                                 </div>
                             </form>
@@ -378,7 +389,7 @@
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Ngày sinh</th>
-                                <th class="text-center">Điện thoại</th>
+                                <th class="text-center">CCCD/CMT</th>
                                 <th class="text-center">Địa chỉ</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
@@ -386,11 +397,11 @@
                         </thead>
                         <tbody>
                             @foreach ($objects as $key => $object)
-                            <tr data-id={{ $object->id }}>
+                            <tr class="item-{{ $object->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $object->belongsToResident->name }}</td>
                                 <td class="text-center">{{ $object->belongsToResident->date_of_birth }}</td>
-                                <td class="text-center">{{ $object->belongsToResident->phone }}</td>
+                                <td class="text-center">{{ $object->belongsToResident->identity_card }}</td>
                                 <td class="">{{ $object->belongsToResident->address }}</td>
                                 <td class="text-center">
                                     <span class="label label-{{ ($object->status_id == 1) ? 'success' : 'danger' }}">{{ ($object->status_id == 1) ? 'Đã tiêm' : 'Chưa tiêm' }}</span>
@@ -417,33 +428,6 @@
                     {!! $objects->links() !!}
                 </div>
                 <!-- /.box -->
-            </div>
-        </div>
-
-        <div class="col-lg-12">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Họ và tên</th>
-                                <th class="text-center">Ngày sinh</th>
-                                <th class="text-center">Điện thoại</th>
-                                <th class="text-center">Địa chỉ</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

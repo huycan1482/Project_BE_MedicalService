@@ -66,6 +66,18 @@ class Session extends Model
         return $this->belongsTo('App\Disease', 'disease_id', 'id');
     }
 
+    public function belongsToDiseaseTrashed () {
+        return $this->belongsTo('App\Disease', 'disease_id', 'id')->withTrashed();
+    }
+
+    public function belongsToWard () {
+        return $this->belongsTo('App\Ward', 'ward_id', 'id');
+    }
+
+    public function belongsToWardWithTrashed () {
+        return $this->belongsTo('App\Ward', 'ward_id', 'id')->withTrashed();
+    }
+
     public function hasManySessionVaccine () {
         return $this->hasMany('App\SessionVaccine', 'session_id', 'id');
     }

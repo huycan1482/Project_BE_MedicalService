@@ -169,6 +169,7 @@
                 <!-- form start -->
                 <form class="">
                     <div class="box-body">
+                        @can('viewAny', App\User::class)
                         <div class="form-group" id="form-province2">
                             <label>Tỉnh/Thành phố quản lý</label>
                             <div>
@@ -204,7 +205,7 @@
                                 </select>
                             </div>
                         </div>
-
+                        @endcan
                         <div class="form-group" id="form-role_id">
                             <label>Quyền <span class="required-dot">**</span></label>
                             <div>

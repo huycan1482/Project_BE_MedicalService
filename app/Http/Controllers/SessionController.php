@@ -25,16 +25,37 @@ class SessionController extends SessionRepository
         $current_user = User::find(Auth::user()->id);
 
         if ($current_user->can('viewAny', Session::class)) {
+            $check_admin = $current_user->can('viewAny', User::class);
+
             if (empty(request()->all()))
-                $sessions = $this->getPaginate10();
+                $sessions = $this->getPaginate10($check_admin ? 0 : $current_user->belongsToRole->ward_id);
             else 
-                $sessions = $this->getFilter10(); 
+                $sessions = $this->getFilter10($check_admin ? 0 : $current_user->belongsToRole->ward_id); 
 
             return view ('admin.session.index', [
                 'sessions' => $sessions,
                 'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
                 'status' => empty(request()->query('status')) ? '' : request()->query('status'),
-                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+                'start_at' => empty(request()->query('start_at')) ? '' : request()->query('start_at'),
+                'end_at' => empty(request()->query('end_at')) ? '' : request()->query('end_at'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+    }
+
+    public function getDataWithTrashed () {
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $sessions = $this->getSessionWithTrashed();
+
+            return view('admin.session.trash', [
+                'sessions' => $sessions,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'start_at' => empty(request()->query('start_at')) ? '' : request()->query('start_at'),
+                'end_at' => empty(request()->query('end_at')) ? '' : request()->query('end_at'),
             ]);
         } else {
             return redirect()->route('admin.errors.4xx');

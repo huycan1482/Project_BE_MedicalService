@@ -175,9 +175,11 @@
                                         <i class="fa-solid fa-pencil"></i>
                                     </a>
 
+                                    @can('viewAny', App\User::class)
                                     <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('nationality', '{{ $nationality->id }}' )" title="Xóa">
                                         <i class="fa fa-trash"></i>
                                     </a>
+                                    @endcan
 
                                 </td>
                             </tr>

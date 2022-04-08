@@ -51,6 +51,10 @@ class Role extends Model
         return $this->belongsTo('App\Ward', 'ward_id', 'id');
     }
 
+    public function belongsToWardTrashed () {
+        return $this->belongsTo('App\Ward', 'ward_id', 'id')->withTrashed();
+    }
+
     public function hasManyUsers () {
         return $this->hasMany('App\User', 'role_id', 'id');
     }

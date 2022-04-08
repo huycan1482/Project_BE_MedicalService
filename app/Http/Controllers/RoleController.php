@@ -41,7 +41,30 @@ class RoleController extends RoleRepository
         } else {
             return redirect()->route('admin.errors.4xx');
         }
-        
+    }
+
+    public function getDataWithTrashed () {
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $roles = $this->getRoleWithTrashed();
+
+            return view('admin.role.trash', [
+                'roles' => $roles,
+                'provinces' => $this->getActiveProvinces(),
+                'districts' => $this->getActiveDistricts(empty(request()->query('province')) ? 0 : request()->query('province')),
+                'wards' => $this->getActiveWards(empty(request()->query('district')) ? 0 : request()->query('district')),
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
+                'level' => empty(request()->query('level')) ? '' : request()->query('level'),
+                'province' => empty(request()->query('province')) ? '' : request()->query('province'),
+                'district' => empty(request()->query('district')) ? '' : request()->query('district'),
+                'ward' => empty(request()->query('ward')) ? '' : request()->query('ward'),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
     }
 
     /**
@@ -124,7 +147,6 @@ class RoleController extends RoleRepository
         } else {
             return redirect()->route('admin.errors.4xx');
         }
-        
     }
 
     /**
@@ -147,7 +169,6 @@ class RoleController extends RoleRepository
         } else {
             return response()->json(['mess' => 'Sửa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
         }
-        
     }
 
     /**

@@ -76,11 +76,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('priority/forceDelete/{id}', 'PriorityController@forceDelete')->name('priority.forceDelete');
     Route::get('priority/restore/{id}', 'PriorityController@restore')->name('priority.restore');
 
+    Route::get('role/trash', 'RoleController@getDataWithTrashed')->name('role.trash');
     Route::get('role/getRolesByWardId/{id}', 'RoleController@getRoleByWardId')->name('role.getRolesByWardId'); 
     Route::resource('role', 'RoleController'); 
     Route::get('role/forceDelete/{id}', 'RoleController@forceDelete')->name('role.forceDelete');
     Route::get('role/restore/{id}', 'RoleController@restore')->name('role.restore');
 
+    Route::get('user/trash', 'UserController@getDataWithTrashed')->name('user.trash');
     Route::resource('user', 'UserController'); 
     Route::get('user/forceDelete/{id}', 'UserController@forceDelete')->name('user.forceDelete');
     Route::get('user/restore/{id}', 'UserController@restore')->name('user.restore');
@@ -92,10 +94,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('resident/restore/{id}', 'ResidentController@restore')->name('resident.restore');
     Route::get('searchResidents', 'ResidentController@searchResidents')->name('resident.search');
 
+    Route::get('session/trash', 'SessionController@getDataWithTrashed')->name('session.trash');
     Route::resource('session', 'SessionController'); 
     Route::get('session/forceDelete/{id}', 'SessionController@forceDelete')->name('session.forceDelete');
     Route::get('session/restore/{id}', 'SessionController@restore')->name('session.restore');
 
+    Route::get('object/trash/{id}', 'InjectionObjectController@getDataWithTrashed')->name('object.trash');
     Route::resource('object', 'InjectionObjectController'); 
     Route::get('object/forceDelete/{id}', 'InjectionObjectController@forceDelete')->name('object.forceDelete');
     Route::get('object/restore/{id}', 'InjectionObjectController@restore')->name('object.restore');

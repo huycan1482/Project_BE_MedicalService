@@ -6,10 +6,11 @@ $(document).ready(function(){
     //Bộ lọc
     $(document).on('click', '.btn-filter', function(e) {
         var name = $('#name').val();
+        var identity = $('#identity').val();
         var sort = $('#sort').val();
         var status = $('#status').val();
 
-        name === "" ? urlParams.delete('name') : urlParams.set('name', name);
+        identity === "" ? urlParams.delete('identity') : urlParams.set('identity', identity);
         sort === "" ? urlParams.delete('sort') : urlParams.set('sort', sort);
         status === "" ? urlParams.delete('status') : urlParams.set('status', status);
 

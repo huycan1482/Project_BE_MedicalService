@@ -25,7 +25,52 @@ class ResidentRepository extends EloquentRepository
     }
 
     public function getResidentsWithTrashed () {
+        $query = $this->_model::onlyTrashed()->select('residents.*')->latest('residents.created_at');
+
+        if (!empty(request()->query('name'))) {
+            $query->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
+        }
+
+        if (!empty(request()->query('phone'))) {
+            $query->where([['residents.phone', 'like', '%' . request()->query('phone') . '%']]);
+        }
+
+        if (!empty(request()->query('email'))) {
+            $query->where([['residents.email', 'like', '%' . request()->query('email') . '%']]);
+        }
+
+        if (!empty(request()->query('identity'))) {
+            $query->where([['residents.identity_card', 'like', '%' . request()->query('identity') . '%']]);
+        }
+
+        // Lọc theo địa bàn quản lý
+        if (!empty(request()->query('ward'))) {
+            $query->where('residents.ward_id', request()->query('ward'));
+
+        } else if (!empty(request()->query('district'))) {
+            $wards = $this->getActiveWards(request()->query('district'));
+            // lấy các xã/phường có district_id là đầu vào và is_active = 1
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
+        } else if (!empty(request()->query('province'))) {
+            $wards = Ward::select('wards.*')->join('districts', 'districts.id', '=', 'wards.district_id')->join('provinces', 'provinces.id', '=', 'districts.province_id')->where([['provinces.id', '=', request()->query('province')], ['wards.is_active', '=', 1], ['districts.is_active', '=', 1], ['provinces.is_active', '=', 1]])->get();
+
+            // lấy các xã/phường có province_id là đầu vào và is_active = 1
+            $query->whereIn('residents.ward_id', $this->getArrWardId($wards));
+        }
+
+        if (request()->query('status') == 'hien-thi') {
+            $query->where('residents.is_active', 1);
+        } else if (request()->query('status') == 'an') {
+            $query->where('residents.is_active', 0);
+        }
         
+        if (request()->query('sort') == 'moi-nhat') {
+            $query->orderBy('residents.id', 'asc');
+        } else if (request()->query('sort') == 'cu-nhat') {
+            $query->orderBy('residents.id', 'desc');
+        } 
+
+        return $query->paginate(10);
     }
 
     public function getPaginate10($cur_ward_id)
@@ -53,8 +98,16 @@ class ResidentRepository extends EloquentRepository
             $query->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
         }
 
+        if (!empty(request()->query('phone'))) {
+            $query->where([['residents.phone', 'like', '%' . request()->query('phone') . '%']]);
+        }
+
         if (!empty(request()->query('email'))) {
             $query->where([['residents.email', 'like', '%' . request()->query('email') . '%']]);
+        }
+
+        if (!empty(request()->query('identity'))) {
+            $query->where([['residents.identity_card', 'like', '%' . request()->query('identity') . '%']]);
         }
 
         // Lọc theo địa bàn quản lý

@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
 
 @section('header_title')
-<title>Medical Services | Resident</title>
+<title>Medical Services | Users</title>
 @endsection
 
 @section('css')
@@ -11,23 +11,17 @@
 
 @section('content')
 <section class="content-header">
-    <h1> Quản lý danh sách Dân cư </h1>
+    <h1> Quản lý danh sách Người dùng đã xóa</h1>
 </section>
 
 <section class="content">
 
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
-            <a class="btn bg-purple" href="{{ route('admin.resident.create') }}">
-                <i class="fa-solid fa-plus"></i>
-                <span style="margin-left: 5px">Thêm mới</span>
+            <a class="btn btn-primary" href="{{ route('admin.user.index') }}">
+                <i class="fa fa-solid fa-list"></i>
+                <span style="margin-left: 5px">Danh sách</span>
             </a>
-            @can('viewAny', App\User::class)
-            <a class="btn btn-primary" href="{{ route('admin.resident.trash') }}">
-                <i class="fa fa-trash"></i>
-                <span style="margin-left: 5px">Danh sách đã xóa</span>
-            </a>
-            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -48,27 +42,16 @@
                     <div class="row">
                         <form action="" class="col-lg-12">
                             <div class="row">
-                                <div class="col-lg-4" style="margin-bottom: 10px">
+                                <div class="col-lg-6" style="margin-bottom: 10px">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <label class="" for="name">Tìm kiếm theo tên</label>
                                     <input type="text" class="form-control" name="name" id="name" placeholder="Tìm kiếm theo tên" value="{{ $name }}">
                                 </div>
-                                <div class="col-lg-4" style="margin-bottom: 10px">
-                                    <i class="fa-solid fa-passport"></i>
-                                    <label class="" for="identity">Tìm kiếm theo CCCD/CMT</label>
-                                    <input type="text" class="form-control" name="identity" id="identity" placeholder="Tìm kiếm theo CCCD/CMT" value="{{ $identity }}">
-                                </div>
-                                <div class="col-lg-4" style="margin-bottom: 10px">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <label class="" for="phone">Tìm kiếm theo số điện thoại</label>
-                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Tìm kiếm theo phone" value="{{ $phone }}">
-                                </div>
-                                <div class="col-lg-4" style="margin-bottom: 10px">
+                                <div class="col-lg-6" style="margin-bottom: 10px">
                                     <i class="fa fa-envelope"></i>
                                     <label class="" for="email">Tìm kiếm theo Email</label>
                                     <input type="text" class="form-control" name="email" id="email" placeholder="Tìm kiếm theo email" value="{{ $email }}">
                                 </div>
-                    
                                 <div class="col-lg-4">
                                     <i class="fa-solid fa-arrow-down-short-wide"></i>
                                     <label class="" for="sort">Sắp xếp</label>
@@ -87,7 +70,19 @@
                                         <option value="an" {{ $status == 'an' ? 'selected' : ''}}>Ẩn</option>
                                     </select>
                                 </div>
-                                
+                                <div class="col-lg-4">
+                                    <i class="fa fa-solid fa-layer-group"></i>
+                                    <label class="" for="level">Cấp độ</label>
+                                    <select name="" id="level" class="form-control">
+                                        <option value="">--Chọn--</option>
+                                        @can('viewAny', App\User::class)
+                                        <option value="Admin" {{ $level == 'Admin' ? 'selected' : ''}}>Admin</option>
+                                        @endcan
+                                        <option value="Tram-truong" {{ $level == 'Tram-truong' ? 'selected' : ''}}>Trạm trưởng</option>
+                                        <option value="Nhan-vien-tram-y-te" {{ $level == 'Nhan-vien-tram-y-te' ? 'selected' : ''}}>Nhân viên trạm y tế</option>
+                                        <option value="Nhan-vien-uy-ban-phuong" {{ $level == 'Nhan-vien-uy-ban-phuong' ? 'selected' : ''}}>Nhân viên ủy ban phường</option>
+                                    </select>
+                                </div>
                                 @can('viewAny', App\User::class)
                                 <div class="col-lg-12" style="margin-top: 15px">
                                     <label style="color: #2980b9">Lọc theo địa bàn quản lý</label>
@@ -140,7 +135,7 @@
         <div class="col-lg-12">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3 class="box-title">Danh sách<span class="label label-info" style="margin-left: 8px">{{ $residents->total() }} kết quả</span></h3>
+                    <h3 class="box-title">Danh sách<span class="label label-info" style="margin-left: 8px">{{ $users->total() }} kết quả</span></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -149,41 +144,33 @@
                             <tr>
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Tên</th>
-                                <th class="text-center">SDT</th>
+                                <th class="text-center">Email</th>
+                                <th class="text-center">Quyền</th>
                                 <th class="text-center">Xã/phường quản lý</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($residents as $key => $resident)
-                            <tr class="item-{{ $resident->id }}">
+                            @foreach ($users as $key => $user)
+                            <tr class="{{ $user->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
-                                <td class="">{{ $resident->name }}</td>
-                                <td class="">{{ $resident->phone }}</td>
-                                <td class="">{{ $resident->belongsToWard->name }}</td>
+                                <td class="">{{ $user->name }}</td>
+                                <td class="">{{ $user->email }}</td>
+                                <td class="">{{ $user->belongsToRoleTrashed->name }}</td>
+                                <td class="">{{ $user->belongsToRoleTrashed->belongsToWardTrashed->name }}</td>
                                 <td class="text-center">
-                                    <span class="label label-{{ ($resident->is_active == 1) ? 'success' : 'danger' }}">{{ ($resident->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
+                                    <span class="label label-{{ ($user->is_active == 1) ? 'success' : 'danger' }}">{{ ($user->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</span>
                                 </td>
                                 <td class="text-center">
 
-                                    {{-- <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$resident->id}}">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button> --}}
-
-                                    <a href="{{ route('admin.resident.listInjections', ['id'=> $resident->id]) }}" class="btn btn-primary" title="Chi tiết">
-                                        <i class="fa-solid fa-vial-circle-check"></i>
+                                    <a href="javascript:void(0)" onclick="restore('user/restore', '{{ $user->id }}' )" class="btn btn-primary" title="Khôi phục">
+                                        <i class="fas fa-trash-restore"></i>
                                     </a>
 
-                                    <a href="{{ route('admin.resident.edit', ['id'=> $resident->id]) }}" class="btn btn-warning" title="Sửa">
-                                        <i class="fa-solid fa-pencil"></i>
+                                    <a href="javascript:void(0)" onclick = "forceDelete('user/forceDelete', '{{ $user->id }}' )" class="btn btn-danger" title="Xóa">
+                                        <i class="fas fa-ban"></i>
                                     </a>
-
-                                    @can('viewAny', App\User::class)
-                                    <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('resident', '{{ $resident->id }}' )" title="Xóa">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                    @endcan
 
                                 </td>
                             </tr>
@@ -193,7 +180,7 @@
                     <!-- /.box-body -->
                 </div>
                 <div class="box-footer" style="display: flex; justify-content: flex-end">
-                    {!! $residents->links() !!}
+                    {!! $users->links() !!}
                 </div>
                 <!-- /.box -->
             </div>
@@ -210,5 +197,5 @@
 <script src="/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 <script src="/myAssets/js/myJS.js"></script>
 <script src="/myAssets/js/notice.js"></script>
-<script src="/myAssets/js/resident/index.js"></script>
+<script src="/myAssets/js/user/index.js"></script>
 @endsection

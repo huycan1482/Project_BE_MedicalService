@@ -22,6 +22,12 @@
                 <i class="fa-solid fa-plus"></i>
                 <span style="margin-left: 5px">Thêm mới</span>
             </a>
+            @can('viewAny', App\User::class)
+            <a class="btn btn-primary" href="{{ route('admin.user.trash') }}">
+                <i class="fa fa-trash"></i>
+                <span style="margin-left: 5px">Danh sách đã xóa</span>
+            </a>
+            @endcan
             <button class="btn btn-flat bg-navy" onclick="reloadPage()">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span style="margin-left: 5px">Tải lại</span>
@@ -75,12 +81,15 @@
                                     <label class="" for="level">Cấp độ</label>
                                     <select name="" id="level" class="form-control">
                                         <option value="">--Chọn--</option>
+                                        @can('viewAny', App\User::class)
                                         <option value="Admin" {{ $level == 'Admin' ? 'selected' : ''}}>Admin</option>
+                                        @endcan
                                         <option value="Tram-truong" {{ $level == 'Tram-truong' ? 'selected' : ''}}>Trạm trưởng</option>
                                         <option value="Nhan-vien-tram-y-te" {{ $level == 'Nhan-vien-tram-y-te' ? 'selected' : ''}}>Nhân viên trạm y tế</option>
                                         <option value="Nhan-vien-uy-ban-phuong" {{ $level == 'Nhan-vien-uy-ban-phuong' ? 'selected' : ''}}>Nhân viên ủy ban phường</option>
                                     </select>
                                 </div>
+                                @can('viewAny', App\User::class)
                                 <div class="col-lg-12" style="margin-top: 15px">
                                     <label style="color: #2980b9">Lọc theo địa bàn quản lý</label>
                                 </div>
@@ -114,6 +123,7 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @endcan
                             </form>
                         </div>
                     </div>
@@ -149,7 +159,7 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $key => $user)
-                            <tr data-id={{ $user->id }}>
+                            <tr class="{{ $user->id }}">
                                 <td class="text-center">{{ $key + 1 }}</td>
                                 <td class="">{{ $user->name }}</td>
                                 <td class="">{{ $user->email }}</td>
@@ -160,17 +170,15 @@
                                 </td>
                                 <td class="text-center">
 
-                                    <button type="button" class="btn btn-primary btn-detail" data-toggle="modal" data-target="" title="Chi tiết" data-id="{{$user->id}}">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-
                                     <a href="{{ route('admin.user.edit', ['id'=> $user->id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>
                                     </a>
 
+                                    @can('viewAny', App\User::class)
                                     <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('user', '{{ $user->id }}' )" title="Xóa">
                                         <i class="fa fa-trash"></i>
                                     </a>
+                                    @endcan
 
                                 </td>
                             </tr>
@@ -186,32 +194,6 @@
             </div>
         </div>
 
-        <div class="col-lg-12">
-            <div class="box box-danger">
-                <div class="box-header">
-                    <h3 class="box-title" style="display: inline; margin-right: 5px">Danh sách đã bị xóa </h3>
-                    <small>(Tải lại sau khi xóa mềm)</small>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">STT</th>
-                                <th class="text-center">Tên</th>
-                                <th class="text-center">Quyền</th>
-                                <th class="text-center">Cơ sở hoạt động</th>
-                                <th class="text-center">Trạng thái</th>
-                                <th class="text-center">Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- /.row -->
 </section>

@@ -12,14 +12,17 @@ $(document).ready(function(){
         var district = $('#district').val();
         var ward = $('#ward').val();
 
+        if (province != undefined && district != undefined && ward != undefined) {
+            province === "" ? urlParams.delete('province') : urlParams.set('province', province);
+            district === "" ? urlParams.delete('district') : urlParams.set('district', district);
+            ward === "" ? urlParams.delete('ward') : urlParams.set('ward', ward);
+        }
+
         name === "" ? urlParams.delete('name') : urlParams.set('name', name);
         email === "" ? urlParams.delete('email') : urlParams.set('email', email);
         sort === "" ? urlParams.delete('sort') : urlParams.set('sort', sort);
         status === "" ? urlParams.delete('status') : urlParams.set('status', status);
         level === "" ? urlParams.delete('level') : urlParams.set('level', level);
-        province === "" ? urlParams.delete('province') : urlParams.set('province', province);
-        district === "" ? urlParams.delete('district') : urlParams.set('district', district);
-        ward === "" ? urlParams.delete('ward') : urlParams.set('ward', ward);
 
         window.location.href = pathname + "?" + decodeURIComponent(urlParams.toString());
     });

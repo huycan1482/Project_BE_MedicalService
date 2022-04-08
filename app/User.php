@@ -90,6 +90,10 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role', 'role_id', 'id');
     }
 
+    public function belongsToRoleTrashed () {
+        return $this->belongsTo('App\Role', 'role_id', 'id')->withTrashed();
+    }
+
     public function belongsToWard () {
         return $this->belongsTo('App\Ward', 'ward_id', 'id');
     }

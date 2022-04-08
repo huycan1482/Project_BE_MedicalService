@@ -27,23 +27,44 @@ class InjectionObjectController extends InjectionObjectRepository
 
         if ($current_user->can('viewAny', InjectionObject::class)) {
             if (empty(request()->all()))
-                $objects = $this->getPaginate10($id);
+                $objects = $this->getPaginate10($id, $current_user->belongsToRole->ward_id);
             else 
-                $objects = $this->getFilter10($id); 
-
+                $objects = $this->getFilter10($id, $current_user->belongsToRole->ward_id); 
+              
             return view ('admin.object.index', [
                 'session_id' => $id,
                 'objects' => $objects,
                 'provinces' => $this->getActiveProvinces(),
                 'districts' => $this->getActiveDistricts(),
                 'wards' => $this->getActiveWards(),
+
                 'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
                 'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'identity' => empty(request()->query('identity')) ? '' : request()->query('identity'),
                 'name' => empty(request()->query('name')) ? '' : request()->query('name'),
 
                 'injectors' => $this->getActiveInjectors($current_user->belongsToRole->ward_id),
                 'vaccines' => $this->getActiveVaccines($id),
                 'priorities' => $this->getActivePriorities(),
+            ]);
+        } else {
+            return redirect()->route('admin.errors.4xx');
+        }
+    }
+
+    public function getDataWithTrashed ($id) {
+        $current_user = User::find(Auth::user()->id);
+
+        if ($current_user->can('viewAny', User::class)) {
+            $objects = $this->getObjectsWithTrashed($id);
+
+            return view('admin.object.trash', [
+                'session_id' => $id,
+                'objects' => $objects,
+                'sort' => empty(request()->query('sort')) ? '' : request()->query('sort'),
+                'status' => empty(request()->query('status')) ? '' : request()->query('status'),
+                'identity' => empty(request()->query('identity')) ? '' : request()->query('identity'),
+                'name' => empty(request()->query('name')) ? '' : request()->query('name'),
             ]);
         } else {
             return redirect()->route('admin.errors.4xx');
@@ -129,6 +150,48 @@ class InjectionObjectController extends InjectionObjectRepository
      */
     public function destroy($id)
     {
-        //
+        $currentUser = User::find(Auth::user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+            if ($this->deleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->forceDeleteModel($id)) {
+                return response()->json(['mess' => 'Xóa bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Xóa bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Xóa bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
+    }
+
+    public function restore($id)
+    {
+        $currentUser = User::findOrFail(Auth()->user()->id);
+
+        if ($currentUser->can('viewAny', User::class)) {
+
+            if ($this->restoreModel($id)) {
+                return response()->json(['mess' => 'Khôi phục bản ghi thành công'], 200);
+            } else {
+                return response()->json(['mess' => 'Khôi phục bản không thành công'], 400);
+            }
+        } else {
+            return response()->json(['mess' => 'Khôi phục bản ghi lỗi, bạn không đủ thẩm quyền'], 403);
+        }
     }
 }

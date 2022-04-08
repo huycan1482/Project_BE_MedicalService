@@ -21,30 +21,74 @@ class InjectionObjectRepository extends EloquentRepository
         return \App\InjectionObject::class;
     }
 
-    public function getPaginate10($id)
-    {
-        // return $this->_model->latest()->paginate(10);
-        return $this->_model->where('session_id', $id)->orderBy('id', 'asc')->paginate(10);
-    }
-
-    public function getFilter10($id)
-    {
-        $query = $this->_model->where('session_id', $id)->orderBy('id', 'asc');
-
+    public function getObjectsWithTrashed ($session_id) {
+        $query = $this->_model->onlyTrashed()->where('objects.session_id', $session_id);
+        
         if (!empty(request()->query('name'))) {
-            $query = $this->_model::where([['name', 'like', '%' . request()->query('name') . '%']]);
+            $query->join('residents', 'residents.id', '=', 'objects.resident_id')
+            ->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
         }
 
-        if (request()->query('status') == 'hien-thi') {
-            $query->where('is_active', 1);
-        } else if (request()->query('status') == 'an') {
-            $query->where('is_active', 0);
+        if (!empty(request()->query('identity'))) {
+            $query->join('residents', 'residents.id', '=', 'objects.resident_id')
+            ->where([['residents.identity_card', 'like', '%' . request()->query('identity') . '%']]);
+        }
+
+        if (request()->query('status') == 'da-tiem') {
+            $query->where('objects.status_id', 1);
+        } else if (request()->query('status') == 'chua-tiem') {
+            $query->where('objects.status_id', 0);
         }
         
-        if (request()->query('sort') == 'moi-nhat') {
-            $query->orderBy('id', 'asc');
-        } else if (request()->query('sort') == 'cu-nhat') {
-            $query->orderBy('id', 'desc');
+        if (request()->query('sort') == 'cu-nhat') {
+            $query->orderBy('objects.id', 'desc');
+        } else {
+            $query->orderBy('objects.id', 'asc');
+        }
+        return $query->paginate(10);
+    }
+
+    public function getPaginate10($id, $ward_id)
+    {
+        if ($ward_id == 0) {
+            return $this->_model->select('objects.*')->where('session_id', $id)->paginate(10);
+        } else {
+            return $this->_model->select('objects.*')->join('sessions', 'objects.session_id', '=', 'sessions.id')
+            ->where([['objects.session_id', '=', $id], ['sessions.ward_id', '=', $ward_id]])
+            ->paginate(10);
+        }
+       
+    }
+
+    public function getFilter10($id, $ward_id)
+    {
+        if ($ward_id == 0) {
+            $query = $this->_model->select('objects.*')->where('objects.session_id', $id);
+        } else {
+            $query = $this->_model->select('objects.*')->join('sessions', 'objects.session_id', '=', 'sessions.id')
+            ->where([['objects.session_id', '=', $id], ['sessions.ward_id', '=', $ward_id]]);
+        }
+
+        if (!empty(request()->query('name'))) {
+            $query->join('residents', 'residents.id', '=', 'objects.resident_id')
+            ->where([['residents.name', 'like', '%' . request()->query('name') . '%']]);
+        }
+
+        if (!empty(request()->query('identity'))) {
+            $query->join('residents', 'residents.id', '=', 'objects.resident_id')
+            ->where([['residents.identity_card', 'like', '%' . request()->query('identity') . '%']]);
+        }
+
+        if (request()->query('status') == 'da-tiem') {
+            $query->where('objects.status_id', 1);
+        } else if (request()->query('status') == 'chua-tiem') {
+            $query->where('objects.status_id', 0);
+        }
+        
+        if (request()->query('sort') == 'cu-nhat') {
+            $query->orderBy('objects.id', 'desc');
+        } else {
+            $query->orderBy('objects.id', 'asc');
         }
 
         return $query->paginate(10);
