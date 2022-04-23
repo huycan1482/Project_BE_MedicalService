@@ -15,6 +15,85 @@
 </section>
 
 <section class="content">
+    {{-- modal thống kê --}}
+    <div class="modal fade" id="modal-statistics">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h2 class="modal-title">Thống kê buổi tiêm</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="box box-info">
+                        <div class="box-header">
+                            <h3 class="box-title">Thông tin chung</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Thời gian bắt đầu</th>
+                                        <th class="text-center">Thời gian kết thúc</th>
+                                        <th class="text-center">Loại dịch bệnh</th>
+                                        <th class="text-center">Loại vaccine</th>
+                                        <th class="text-center">Xã/Phường quản lý</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-1">
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h3 class="box-title">Thông tin chi tiết</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Số lượng đã tiêm</th>
+                                        <th class="text-center">Trạng thái</th>
+                                        <th class="text-center">Độ tuổi hơn 65</th>
+                                        <th class="text-center">Độ tuổi từ 18 đến 65</th>
+                                        <th class="text-center">Độ tuổi từ 12 đến 17</th>
+                                        <th class="text-center">Độ tuổi từ 5 đến 11</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-2">
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">    
         <div class="col-lg-12" style="margin-bottom: 10px">  
             <a class="btn bg-purple" href="{{ route('admin.session.create') }}">
@@ -105,7 +184,7 @@
                                 <th class="text-center">Thời gian kết thúc</th>
                                 <th class="text-center">Loại dịch bệnh</th>
                                 <th class="text-center">Loại vaccine</th>
-                                <th class="text-center">Số lượng</th>
+                                <th class="text-center">Số lượng đã tiêm</th>
                                 <th class="text-center">Xã/Phường quản lý</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Hành động</th>
@@ -123,7 +202,7 @@
                                         {{$item->name.','}}
                                     @endforeach
                                 </td>
-                                <td class="text-center">{{ $session->hasManyObject->count() }}</td>
+                                <td class="text-center">{{ $session->hasManyInjectedObjects->count() }}/{{ $session->hasManyObjects->count() }}</td>
                                 <td class="text-center">{{ $session->belongsToWard->name }}</td>
                                 <td class="text-center">
                                   
@@ -137,7 +216,10 @@
                                     
                                 </td>
                                 <td class="text-center" >
-                                    <a href="{{ route('admin.object.listObjects', ['id' => $session->id]) }}" class="btn btn-primary btn-detail" title="Chi tiết"> 
+                                    <button class="btn btn-primary show-statistics" data-toggle="modal" data-target="#modal-statistics" data-id="{{$session->id}}">
+                                        <i class="fa fa-solid fa-chart-column"></i>
+                                    </button>
+                                    <a href="{{ route('admin.object.listObjects', ['id' => $session->id]) }}" class="btn btn-primary btn-success" title="Chi tiết"> 
                                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                     </a>
                                     <a href="{{ route('admin.session.edit', ['id'=> $session->id]) }}" class="btn btn-warning" title="Sửa">

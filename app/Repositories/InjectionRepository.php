@@ -52,8 +52,34 @@ class InjectionRepository extends EloquentRepository
     }
 
     public function createInjection ($arr_data) {
-        $this->countInjection($arr_data['resident_id'], 1);
-        dd();
+        $number = $this->countInjection($arr_data['resident_id'], $arr_data['disease_id']);
+
+        $prev_injection = $this->checkInjectionDate($arr_data['resident_id'], $arr_data['disease_id']);
+
+        if ($number >= 3 || $arr_data['dose'] <= $number) {
+            return [
+                'status' => false,
+                'mess' => 'Mũi tiêm không hợp lệ',
+            ];
+        }
+
+        if (!empty($prev_injection->first())) {
+            $prev_date = strtotime($prev_injection->first()->date);
+            $injected_date = strtotime ($arr_data['created_at']);
+            
+            // $prev_date = strtotime('2022-05-19');
+            // $injected_date = strtotime('2022-04-23');
+            $date_diff = ($injected_date - $prev_date);
+            $check_date = floor($date_diff / (60*60*24));  
+
+            if ($check_date < 30) {
+                return [
+                    'status' => false,
+                    'mess' => 'Chưa đủ 1 tháng kể từ mũi tiêm trước',
+                ];
+            }
+        }
+
         $injection = new Injection();
         $injection->pack_id = $arr_data['pack_id'];
         $injection->resident_id = $arr_data['resident_id'];
@@ -65,7 +91,7 @@ class InjectionRepository extends EloquentRepository
         $injection->injector_id = $arr_data['injector_id'];
         $injection->watcher_id = $arr_data['watcher_id'];
         $injection->description = $arr_data['description'];
-        $injection->created_at = $arr_data['created_at'];
+        $injection->date = $arr_data['created_at'];
 
         if (!empty($arr_data['object_id'])) {
             $object = InjectionObject::find($arr_data['object_id']);
@@ -73,15 +99,27 @@ class InjectionRepository extends EloquentRepository
             if ($injection->save()) {
                 $object->status_id = 1;
                 $object->save();
-                return true;
+                return [
+                    'status' => true,
+                    'mess' => 'Thêm thành công',
+                ];
             } else {
-                return false;
+                return [
+                    'status' => false,
+                    'mess' => 'Thêm bản ghi thất bại',
+                ];
             }
         } else {
             if ($injection->save()) {
-                return true;
+                return [
+                    'status' => true,
+                    'mess' => 'Thêm thành công',
+                ];
             } else {
-                return false;
+                return [
+                    'status' => false,
+                    'mess' => 'Thêm bản ghi thất bại',
+                ];
             }
         }
     }
@@ -93,6 +131,16 @@ class InjectionRepository extends EloquentRepository
         ->join('injections', 'injections.pack_id', '=', 'packs.id')
         ->where([['vaccine_disease.disease_id', '=', $disease_id], ['injections.resident_id', '=', $resident_id]])
         ->get()->count();
+    }
+
+    public function checkInjectionDate($resident_id, $disease_id) {
+        return VaccineDisease::select('injections.*')
+        ->join('vaccines', 'vaccines.id', '=', 'vaccine_disease.vaccine_id')
+        ->join('packs', 'packs.vaccine_id', '=', 'vaccines.id')
+        ->join('injections', 'injections.pack_id', '=', 'packs.id')
+        ->where([['vaccine_disease.disease_id', '=', $disease_id], ['injections.resident_id', '=', 2]])
+        ->orderBy('injections.date', 'desc')
+        ->get();
     }
 
     public function getActiveVaccines () {

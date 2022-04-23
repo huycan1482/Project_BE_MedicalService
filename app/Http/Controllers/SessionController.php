@@ -141,7 +141,17 @@ class SessionController extends SessionRepository
      */
     public function show($id)
     {
-        //
+        $current_user = User::find(Auth::user()->id);
+
+        $session_info = $this->getSessionInfo($id);
+
+        return response()->json([
+            'mess' => 'Lấy dữ liệu thành công', 
+            'status' => 'true',
+            'data' => $session_info, 200
+        ]);
+
+
     }
 
     /**

@@ -86,6 +86,10 @@ class Session extends Model
         return $this->hasMany('App\InjectionObject', 'session_id', 'id');
     }
 
+    public function hasManyInjectedObjects () {
+        return $this->hasMany('App\InjectionObject', 'session_id', 'id')->where('status_id', 1);
+    }
+
     public function belongsToManyVaccines () {
         return $this->belongsToMany('App\Vaccine', 'session_vaccine', 'session_id', 'vaccine_id')->withPivot('id', 'session_id', 'vaccine_id', 'created_at', 'updated_at', 'deleted_at');
     }
@@ -95,12 +99,4 @@ class Session extends Model
         return $this->belongsToMany('App\Vaccine', 'session_vaccine', 'session_id', 'vaccine_id')->where('is_active', 1)->withPivot('id', 'session_id', 'vaccine_id', 'created_at', 'updated_at', 'deleted_at');
     }
     // lấy dữ liệu bảng n-n vaccines
-
-    public function hasManyObject () {
-        return $this->hasMany('App\InjectionObject', 'session_id', 'id');
-    }
-
-    
-
-    
 }

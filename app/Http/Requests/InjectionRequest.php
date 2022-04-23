@@ -93,6 +93,8 @@ class InjectionRequest extends FormRequest
             'watcher_id' => 'required|exists:users,id',
             'injector_id' => 'required|exists:users,id',
             'description' => 'nullable|string',
+            'created_at' => 'nullable|date_format:Y-m-d',
+            'disease_id' => 'required|exists:diseases,id'
         ];
     }
 
@@ -123,6 +125,7 @@ class InjectionRequest extends FormRequest
             'injector_id.required' => 'Yêu cầu không để trống',
             'injector_id.exists' => 'Dữ liệu không tồn tại',
             'description.string' => 'Dữ liệu ko đúng định dạng',
+            'created_at.date_format' => 'Sai định dạng ngày tháng',
         ];
     }
 }

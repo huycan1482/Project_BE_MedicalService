@@ -157,6 +157,8 @@ $(document).ready(function(){
         var injector_id = $('#injector_id').val();
         var watcher_id = $('#watcher_id').val();
         var description = $('#description').val();
+        var disease_id = $('#disease_id').val();
+        var created_at = $('#created_at').val();
 
         var data = {
             'pack_id': pack_id,
@@ -168,7 +170,9 @@ $(document).ready(function(){
             'reaction_id': reaction_id,
             'injector_id': injector_id,
             'watcher_id': watcher_id,
-            'description': description
+            'description': description,
+            'disease_id': disease_id,
+            'created_at': created_at,
         }
 
         $.ajax({

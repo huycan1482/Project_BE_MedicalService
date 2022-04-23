@@ -342,6 +342,7 @@ class CreateAllTable extends Migration
             $table->integer('type');
             $table->integer('dose');
             $table->integer('reaction_id');
+            $table->date('date');
             $table->unsignedBigInteger('injector_id')->nullable();
             $table->unsignedBigInteger('watcher_id')->nullable();
             $table->text('description')->nullable();

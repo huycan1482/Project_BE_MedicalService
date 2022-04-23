@@ -93,7 +93,7 @@
                                 <td>{{ $item->vaccine_name }}</td>
                                 <td>{{ $item->pack_name }}</td>
                                 <td class="text-center">{{ $item->dose }}</td>
-                                <td>{{ date_format(date_create($item->created_at), 'd/m/Y') }}</td>
+                                <td>{{ date_format(date_create($item->date), 'd/m/Y') }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('admin.injection.edit', ['id'=> $item->injection_id]) }}" class="btn btn-warning" title="Sửa">
                                         <i class="fa-solid fa-pencil"></i>

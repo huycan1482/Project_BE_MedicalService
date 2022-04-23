@@ -63,10 +63,11 @@ class InjectionController extends InjectionRepository
         $current_user = User::find(Auth::user()->id);
         // dd($request->all());
         if ($current_user->can('create', Injection::class)) {
-            if ($this->createInjection($request->all()) != false) {
+            // dd($this->createInjection($request->all())['status']);
+            if ($this->createInjection($request->all())['status'] != false) {
                 return response()->json(['mess' => 'Thêm bản ghi thành công', 200]);
             } else {
-                return response()->json(['mess' => 'Thêm bản ghi lỗi'], 502); 
+                return response()->json(['mess' => $this->createInjection($request->all())['mess']], 502); 
             }
         } else {
             return response()->json(['mess' => 'Thêm bản ghi lỗi, bạn không đủ thẩm quyền'], 403); 

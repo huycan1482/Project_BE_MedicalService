@@ -30,9 +30,12 @@ class InjectionObjectController extends InjectionObjectRepository
                 $objects = $this->getPaginate10($id, $current_user->belongsToRole->ward_id);
             else 
                 $objects = $this->getFilter10($id, $current_user->belongsToRole->ward_id); 
+
+            $session = Session::findOrFail($id);
               
             return view ('admin.object.index', [
                 'session_id' => $id,
+                'disease_id' => $session->disease_id,
                 'objects' => $objects,
                 'provinces' => $this->getActiveProvinces(),
                 'districts' => $this->getActiveDistricts(),

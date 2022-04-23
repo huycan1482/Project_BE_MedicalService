@@ -73,7 +73,7 @@ class PackRepository extends EloquentRepository
     }
 
     public function getActivePacks ($vaccine_id) {
-        return Pack::where([['is_active', '=', 1], ['vaccine_id', '=', $vaccine_id]])->latest()->get();
+        return Pack::where([['is_active', '=', 1], ['vaccine_id', '=', $vaccine_id]])->whereRaw("(expired) > CURDATE()")->latest()->get();
     }
 
     public function getActiveProducers () {

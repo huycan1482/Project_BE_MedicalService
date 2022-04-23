@@ -238,7 +238,7 @@ class ResidentRepository extends EloquentRepository
     }    
 
     public function getListInjection ($resident_id, $disease_id) {
-        $data = Resident::select('residents.name', 'injections.dose', 'vaccines.id as vaccine_id', 'vaccines.name as vaccine_name', 'packs.name as pack_name',  DB::raw('group_concat(diseases.name) as disease_name'), 'injections.created_at', 'injections.id as injection_id')
+        $data = Resident::select('residents.name', 'injections.dose', 'vaccines.id as vaccine_id', 'vaccines.name as vaccine_name', 'packs.name as pack_name',  DB::raw('group_concat(diseases.name) as disease_name'), 'injections.date', 'injections.id as injection_id')
         ->join('injections', 'residents.id', '=', 'injections.resident_id')
         ->join('packs', 'packs.id', '=', 'injections.pack_id')
         ->join('vaccines', 'vaccines.id', '=', 'packs.vaccine_id')
@@ -250,7 +250,7 @@ class ResidentRepository extends EloquentRepository
         } 
 
         $data->where('residents.id', $resident_id)
-        ->orderBy('created_at', 'asc')
+        ->orderBy('date', 'asc')
         ->groupBy('vaccines.id');
 
         return $data->get();

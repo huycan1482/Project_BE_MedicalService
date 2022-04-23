@@ -42,7 +42,7 @@
                                     <input id="" name="" type="text" class="form-control" value="{{ date_format(date_create($injection->belongsToObject->belongsToSession->end_at), 'd/m/Y') }}" disabled>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-3" id="form-end_at">
+                            <div class="form-group col-lg-3" id="form-address">
                                 <label>Địa chỉ</label>
                                 <div>
                                     <input id="" name="" type="text" class="form-control" value="{{ $injection->belongsToObject->belongsToSession->address }}" disabled>
@@ -114,7 +114,7 @@
                             <div class="form-group col-lg-3" id="form-created_at">
                                 <label>Ngày tiêm</label>
                                 <div>
-                                    <input id="created_at" name="created_at" type="date" class="form-control" value="{{ date_format(date_create($injection->created_at), 'Y-m-d') }}">
+                                    <input id="created_at" name="created_at" type="date" class="form-control" value="{{ date_format(date_create($injection->date), 'Y-m-d') }}">
                                 </div>
                                 {{-- value="{{ date_format(date_create($injection->created_at), 'd/m/Y') }}" --}}
                             </div>

@@ -26,12 +26,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="custom-import">
-                        <form action="{{ route('admin.import.nationality') }}" method="POST" name="" enctype="multipart/form-data">
+                        <form action="{{ route('admin.import.object') }}" method="POST" name="" enctype="multipart/form-data">
                             @csrf
                             <label for="">Chọn file Excel</label><br>
                             <input name="import_file" type="file" class="custom-type-file" id="import-file"><br><br>
                             <button class="label-type-file btn btn-primary">Nhập file excel</button>
+                            <input type="text" name="session_id" value="{{ $session_id }}" style="display: none">
                         </form>
+                    </div>
+                    <div>
+                        @if($errors->any())
+                            <h4>Dữ liệu không nhập thành công: {{ $errors->first('count_failed') }}</h4>
+                            @foreach($errors->get('data_failed') as $item) 
+                            <p>CCCD/CMT không nhập thành công: {{$item}}</p>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -181,6 +190,7 @@
                                                     <option value="{{ $vaccine->id }}">{{ $vaccine->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <input type="text" name="disease_id" id="disease_id" value="{{ $disease_id }}" style="display:none">
                                             </div>
                                         </td>
                                         <td>                                           
@@ -216,7 +226,7 @@
                                     <tr>
                                         <td>                                           
                                             <div>
-                                                <input class="form-control" type="date" name="create_at" id="create_at" placeholder="" disabled value={{date('Y-m-d')}}>
+                                                <input class="form-control" type="date" name="created_at" id="created_at" placeholder="" value={{date('Y-m-d')}}>
                                             </div>
                                         </td>
                                         <td>                                           
@@ -411,8 +421,11 @@
                                         <button type="button" class="btn btn-primary btn-detail" id="btn-active-modal-injection" data-toggle="modal" data-target="#modal-injection" title="Chi tiết" object-id="{{$object->id}}" resident-id="{{$object->belongsToResident->id}}">
                                             <i class="fa-solid fa-pencil"></i>
                                         </button>
+                                    @else
+                                        <a href="{{ route('admin.resident.listInjections', ['id'=> $object->resident_id]) }}" class="btn btn-success" title="Chi tiết">
+                                            <i class="fa-solid fa-vial-circle-check"></i>
+                                        </a>
                                     @endif
-                                    
                                     <a href="javascript:void(0)" class="btn btn-danger" onclick="destroyModel('object', '{{ $object->id }}' )" title="Xóa">
                                         <i class="fa fa-trash"></i>
                                     </a>

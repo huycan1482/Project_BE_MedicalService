@@ -141,38 +141,42 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{ route('postLogin') }}" method="POST">
+                    <form action="{{ route('postResetPassword') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <!-- <label for="email" class="form-label">Địa chỉ Email</label> -->
+                            <label for="email" class="form-label">Email đăng nhập</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email') }}">
                             <span class="error-text">{{$errors->first('email')}}</span>
                         </div>
                         <div class="form-group">
-                            <!-- <label for="password" class="form-label">Mật khẩu</label> -->
+                            <label for="verification_code" class="form-label">Mã xác nhận</label>
+                            <input type="verification_code" class="form-control" id="verification_code" name="verification_code" placeholder="Mã xác nhận" value="{{ old('verification_code') }}">
+                            <span class="error-text">{{$errors->first('verification_code')}}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Mật khẩu mới</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="{{ old('password') }}">
                             <span class="error-text">{{$errors->first('password')}}</span>
                         </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
+                        <div class="form-group">
+                            <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Repassword" value="{{ old('password_confirmation') }}">
+                            <span class="error-text">{{$errors->first('password_confirmation')}}</span>
                         </div>
-
+                        
                         <span class="error-alert"> {{ session('msg') ? session('msg') : '' }} </span>    
                         
-                        <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                        <button type="submit" class="btn btn-primary btn-block">Đổi mật khẩu</button>
                     </form>
                 </div>
 
                 <div class="box-footer">
-                    <a href="{{ route('checkEmail') }}">Lấy lại mật khẩu</a>
+                    <a href="{{ route('login') }}">Đăng nhập</a>
                 </div>
             </div>
         </div>
 
     </div>
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

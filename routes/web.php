@@ -19,6 +19,13 @@ Route::get('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/postLogin', 'Auth\LoginController@postLogin')->name('postLogin');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
+Route::get('/checkEmail', 'Auth\ForgotPasswordController@checkEmail')->name('checkEmail');
+Route::post('/postCheckEmail', 'Auth\ForgotPasswordController@postCheckEmail')->name('postCheckEmail');
+
+Route::get('/resetPassword', 'Auth\ResetPasswordController@resetPassword')->name('resetPassword');
+Route::post('/postResetPassword', 'Auth\ResetPasswordController@postResetPassword')->name('postResetPassword');
+
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin'], function () {
 // Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('nationality/trash', 'NationalityController@getDataWithTrashed')->name('nationality.trash');
@@ -110,6 +117,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('injection/forceDelete/{id}', 'InjectionController@forceDelete')->name('injection.forceDelete');
     Route::get('injection/restore/{id}', 'InjectionController@restore')->name('injection.restore');
 
+
+    Route::get('statistic', 'StatisticsController@index')->name('statistic.index');
+
+    //StatisticsController
+    Route::get('statistics/', 'StatisticsController@index')->name('statistics.index');
+
     // ImportController
     // ImportProvince
     Route::post('import/province', 'ImportController@ImportProvince')->name('import.province');
@@ -119,6 +132,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::post('import/district', 'ImportController@ImportDistrict')->name('import.district');
     // ImportWard
     Route::post('import/ward', 'ImportController@ImportWard')->name('import.ward');
+    // ImportObject
+    Route::post('import/object', 'ImportController@ImportObject')->name('import.object');
 
 
     //Errors Controller 
@@ -128,5 +143,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
             'msg' => 'Trang bạn tìm kiếm không tồn tại'
         ]);
     })->name('errors.4xx');
-
 });

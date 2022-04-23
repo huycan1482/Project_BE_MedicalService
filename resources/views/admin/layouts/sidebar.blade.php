@@ -72,6 +72,18 @@
             </li>
             @endcan
 
+            @can('viewAny', App\User::class)
+            <li>
+                <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
+            </li>
+            @endcan
+
+            @can('view', App\User::class)
+            <li>
+                <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
+            </li>
+            @endcan
+
             @can('viewAny', App\Resident::class)
             <li>
                 <a href="{{ route('admin.resident.index') }}"><i class="fa fa-solid fa-users"></i> <span>Quản lí dân cư</span></a>
@@ -84,17 +96,26 @@
             </li>
             @endcan
 
-            @can('viewAny', App\User::class)
             <li>
-                <a href="{{ route('admin.role.index') }}"><i class="fa fa-solid fa-layer-group"></i> <span>Quản lí quyền</span></a>
+                <a href="{{ route('admin.statistic.index') }}"><i class="fa fa-solid fa-chart-pie"></i><span> Quản lý Thống kê</span></a>
             </li>
-            @endcan
 
-            @can('view', App\User::class)
-            <li>
-                <a href="{{ route('admin.user.index') }}"><i class="fa fa-solid fa-users-gear"></i> <span>Quản lí người dùng</span></a>
-            </li>
-            @endcan
+            {{-- <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-solid fa-chart-pie"></i><span>Quản lý Thống kê</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href=""><i class="fa fa-solid fa-chart-column"></i><span>Thống kê trong buổi tiêm</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa fa-solid fa-chart-line"></i><span>Thống kê trên địa bàn QL</span></a>
+                    </li>
+                </ul>
+            </li> --}}
         </ul>
     </section>
     <!-- /.sidebar -->

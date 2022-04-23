@@ -14,8 +14,12 @@ class Injection extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'pack_id', 'resident_id', 'object_id', 'priority_id', 'type', 'dose', 'reaction_id', 'injector_id', 'watcher_id', 'description', 'created_at', 'updated_at'
+        'pack_id', 'resident_id', 'object_id', 'priority_id', 'type', 'dose', 'reaction_id', 'injector_id', 'watcher_id', 'description', 'date', 'created_at', 'updated_at'
     ];
+
+    // protected $fillable = [
+    //     'pack_id', 'object_id', 'priority_id', 'type', 'dose', 'reaction_id', 'injector_id', 'watcher_id', 'description', 'created_at', 'updated_at'
+    // ];
 
     public function belongsToResident () {
         return $this->belongsTo('App\Resident', 'resident_id', 'id');

@@ -13,6 +13,7 @@ $(document).ready(function(){
         var reaction_id = $("#reaction_id").val();
         var watcher_id = $("#watcher_id").val();
         var description = $("#description").val();
+        var disease_id = $("#disease_id").val();
         var data = {
             'resident_id': resident_id,
             'type' : type, 
@@ -24,6 +25,7 @@ $(document).ready(function(){
             'reaction_id' : reaction_id,
             'watcher_id' : watcher_id,
             'description' : description,
+            'disease_id': disease_id,
         };
 
         addModel(url, data);

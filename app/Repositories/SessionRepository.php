@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Disease;
 use App\District;
 use App\Province;
+use App\Resident;
 use App\Session;
 use App\SessionVaccine;
 use App\Vaccine;
@@ -194,5 +195,50 @@ class SessionRepository extends EloquentRepository
 
     public function getActiveWards () {
         return Ward::where('is_active', 1)->get();
+    }
+
+    public function getSessionInfo ($session_id) {
+        $session = Session::find($session_id);
+        
+        $data = [
+            'start_at' => $session->start_at,
+            'end_at' => $session->end_at,
+            'disease' => $session->belongsToDisease->name,
+            'vaccines' => $this->getVaccinesName($session),
+            'ward' => $session->belongsToWard->name,
+            'number_injected' => $session->hasManyInjectedObjects->count(),
+            'number' => $session->hasManyObjects->count(),
+            'status' => $session->status_id,
+            'age_65' => Resident::select('residents.id')
+            ->join('objects', 'objects.resident_id', '=', 'residents.id')
+            ->whereRaw("floor(datediff (now(), residents.date_of_birth)/365) >= 65")
+            ->where('objects.session_id', $session_id)->get()->count(),
+            'age_18_65' => Resident::select('residents.id')
+            ->join('objects', 'objects.resident_id', '=', 'residents.id')
+            ->whereRaw("floor(datediff (now(), residents.date_of_birth)/365) < 65 and floor(datediff (now(), residents.date_of_birth)/365) >= 18")
+            ->where('objects.session_id', $session_id)->get()->count(),
+            'age_12_17' => Resident::select('residents.id')
+            ->join('objects', 'objects.resident_id', '=', 'residents.id')
+            ->whereRaw("floor(datediff (now(), residents.date_of_birth)/365) <= 17 and floor(datediff (now(), residents.date_of_birth)/365) >= 12")
+            ->where('objects.session_id', $session_id)->get()->count(),
+            'age_5_11' => Resident::select('residents.id')
+            ->join('objects', 'objects.resident_id', '=', 'residents.id')
+            ->whereRaw("floor(datediff (now(), residents.date_of_birth)/365) <= 11 and floor(datediff (now(), residents.date_of_birth)/365) >= 5 ")
+            ->where('objects.session_id', $session_id)->get()->count(),
+        ];
+
+        return $data;
+    }
+
+    public function getVaccinesName ($session) {
+        $data = '';
+
+        foreach ($session->belongsToManyVaccines as $key => $item) {
+            if ($key == 0) 
+                $data .= $item->name;
+            $data .= ', '.$item->name;
+        }
+
+        return $data;
     }
 }
