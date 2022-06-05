@@ -11,7 +11,7 @@ function messageResponse (status, mess) {
     
     $('#message').fadeIn();
 
-    $('#message').delay(2500).fadeOut();
+    // $('#message').delay(2500).fadeOut();
 }
 
 
@@ -31,7 +31,7 @@ function messageFade (status, mess, reload) {
 
     $('#message').fadeIn();
 
-    $('#message').delay(2500).fadeOut();
+    // $('#message').delay(2500).fadeOut();
 }
 
 function messageReload (status, mess, reload) {

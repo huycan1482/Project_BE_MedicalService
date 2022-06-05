@@ -117,11 +117,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::get('injection/forceDelete/{id}', 'InjectionController@forceDelete')->name('injection.forceDelete');
     Route::get('injection/restore/{id}', 'InjectionController@restore')->name('injection.restore');
 
-
     Route::get('statistic', 'StatisticsController@index')->name('statistic.index');
 
     //StatisticsController
     Route::get('statistics/', 'StatisticsController@index')->name('statistics.index');
+
+    Route::get('exceptions/', function () {
+        return view ('admin.exceptions.index');
+    });
 
     // ImportController
     // ImportProvince

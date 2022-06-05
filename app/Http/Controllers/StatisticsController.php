@@ -31,7 +31,8 @@ class StatisticsController extends Controller
             ->join('packs', 'packs.id', '=', 'injections.pack_id')
             ->join('vaccines', 'vaccines.id', '=', 'packs.vaccine_id')
             ->join('vaccine_disease', 'vaccines.id', '=', 'vaccine_disease.vaccine_id')
-            ->where([['vaccine_disease.disease_id', '=', $disease_id], ['residents.is_active', '=', 1]]);
+            ->where([['vaccine_disease.disease_id', '=', $disease_id], ['residents.is_active', '=', 1]])
+            ->groupBy('injections.resident_id');
 
             if (!$current_user->can('viewAny', User::class)) {
                 $query->where([['residents.ward_id', '=', $current_user->belongsToRole->ward_id]]);

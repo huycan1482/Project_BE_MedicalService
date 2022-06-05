@@ -57,7 +57,7 @@ class LoginController extends Controller
 
 
         if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password'), 'is_active' => 1], $request->input('remember'))) {
-            return redirect()->route('admin.resident.index');
+            return redirect()->route('admin.statistic.index');
         }
 
         return redirect()->back()->with('msg', 'Email hoặc Password không chính xác');
